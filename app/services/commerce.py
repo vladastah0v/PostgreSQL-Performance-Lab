@@ -1,8 +1,8 @@
 from collections.abc import Callable, Sequence
 
 from app.core.exceptions import ResourceNotFound
-from app.models import OrderStatus
-from app.repositories.baseline.queries import BaselineRepository
+from app.models.order import SALES_STATUSES
+from app.repositories.commerce import CommerceRepository
 from app.schemas.parameters import (
     DateRange,
     EventSearch,
@@ -26,8 +26,6 @@ from app.schemas.responses import (
     UserSummary,
 )
 
-SALES_STATUSES = (OrderStatus.PAID, OrderStatus.SHIPPED, OrderStatus.DELIVERED)
-
 
 def make_page[T, R](
     rows: Sequence[R], query: OffsetParams, convert: Callable[[R], T]
@@ -40,8 +38,8 @@ def make_page[T, R](
     )
 
 
-class BaselineService:
-    def __init__(self, repository: BaselineRepository):
+class CommerceService:
+    def __init__(self, repository: CommerceRepository):
         self.repository = repository
 
     async def search_users(self, query: UserSearch) -> Page[UserSummary]:
@@ -50,25 +48,21 @@ class BaselineService:
         )
 
     async def user_orders(self, user_id: int, query: OrderSearch) -> Page[UserOrder]:
-        if await self.repository.user(user_id) is None:
+        orders = await self.repository.user_orders(user_id, query)
+        if orders is None:
             raise ResourceNotFound("User not found")
-        orders = await self.repository.orders(query, user_id=user_id)
-
-        # Deliberate N+1: load every line item for each order to compute its item count.
-        items = []
-        for order in orders[: query.limit]:
-            order_items = await self.repository.order_items(order.id)
-            items.append(
+        rows, has_more = orders
+        return Page(
+            items=[
                 UserOrder(
                     **OrderSummary.model_validate(order).model_dump(),
-                    item_count=len(order_items),
+                    item_count=item_count,
                 )
-            )
-        return Page(
-            items=items,
+                for order, item_count in rows
+            ],
             limit=query.limit,
             offset=query.offset,
-            has_more=len(orders) > query.limit,
+            has_more=has_more,
         )
 
     async def orders(self, query: OrderSearch) -> Page[OrderSummary]:
@@ -77,11 +71,10 @@ class BaselineService:
         )
 
     async def order_details(self, order_id: int) -> OrderDetails:
-        order = await self.repository.order(order_id)
-        if order is None:
+        details = await self.repository.order_details(order_id)
+        if details is None:
             raise ResourceNotFound("Order not found")
-        items = await self.repository.order_items(order_id)
-        payments = await self.repository.payments(order_id)
+        order, items, payments = details
         return OrderDetails(
             **OrderSummary.model_validate(order).model_dump(),
             updated_at=order.updated_at,

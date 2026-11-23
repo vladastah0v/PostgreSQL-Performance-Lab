@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
-from sqlalchemy import CheckConstraint, String
+from sqlalchemy import CheckConstraint, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -41,3 +41,6 @@ class User(Base):
     events: Mapped[list[UserEvent]] = relationship(
         back_populates="user", lazy="raise", passive_deletes="all"
     )
+
+
+Index("ix_users_city_status_id", func.lower(User.city), User.status, User.id)

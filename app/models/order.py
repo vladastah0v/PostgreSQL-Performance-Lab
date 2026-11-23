@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
-from sqlalchemy import BigInteger, CheckConstraint, ForeignKey
+from sqlalchemy import BigInteger, CheckConstraint, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -29,6 +29,9 @@ class OrderStatus(StrEnum):
     DELIVERED = "delivered"
     CANCELLED = "cancelled"
     REFUNDED = "refunded"
+
+
+SALES_STATUSES = (OrderStatus.PAID, OrderStatus.SHIPPED, OrderStatus.DELIVERED)
 
 
 class Order(Base):
@@ -92,3 +95,15 @@ class OrderStatusHistory(Base):
     changed_at: Mapped[CreatedAt]
 
     order: Mapped[Order] = relationship(back_populates="status_history", lazy="raise")
+
+
+Index("ix_orders_created_id", Order.created_at, Order.id)
+Index("ix_orders_status_created_id", Order.status, Order.created_at, Order.id)
+Index("ix_orders_user_created_id", Order.user_id, Order.created_at, Order.id)
+Index(
+    "ix_orders_sales_created_cover",
+    Order.created_at,
+    postgresql_include=["user_id", "total_amount"],
+    postgresql_where=Order.status.in_(SALES_STATUSES),
+)
+Index("ix_order_items_order_id_id", OrderItem.order_id, OrderItem.id)

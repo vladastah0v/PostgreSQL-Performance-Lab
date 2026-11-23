@@ -17,6 +17,7 @@ async def test_baseline_routes_are_absent_outside_lab_mode() -> None:
         assert (await client.get(PATH)).status_code == 404
         openapi = (await client.get("/openapi.json")).json()
     assert all(not path.startswith("/api/v1/baseline") for path in openapi["paths"])
+    assert "/api/v1/optimized/users/search" in openapi["paths"]
 
 
 @pytest.mark.asyncio

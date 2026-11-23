@@ -8,6 +8,8 @@ from sqlalchemy.orm import InstrumentedAttribute
 from sqlalchemy.sql.elements import ColumnElement
 
 from app.models import Order, OrderItem, OrderStatus, Payment, Product, User, UserEvent
+from app.repositories.commerce import OrderDetailsRows, UserOrders
+from app.repositories.filters import user_filters
 from app.schemas.parameters import (
     DateRange,
     EventSearch,
@@ -38,24 +40,27 @@ class BaselineRepository:
     async def search_users(self, query: UserSearch) -> Sequence[User]:
         # A full ORM projection loads timestamps the response never uses.
         statement = (
-            select(User).order_by(User.id).offset(query.offset).limit(query.limit + 1)
+            select(User)
+            .where(*user_filters(query))
+            .order_by(User.id)
+            .offset(query.offset)
+            .limit(query.limit + 1)
         )
-        if query.name is not None:
-            statement = statement.where(
-                User.full_name.icontains(query.name, autoescape=True)
-            )
-        if query.city is not None:
-            statement = statement.where(func.lower(User.city) == query.city.lower())
-        if query.email is not None:
-            statement = statement.where(
-                User.email.icontains(query.email, autoescape=True)
-            )
-        if query.status is not None:
-            statement = statement.where(User.status == query.status)
         return (await self.session.scalars(statement)).all()
 
     async def user(self, user_id: int) -> User | None:
         return await self.session.get(User, user_id)
+
+    async def user_orders(self, user_id: int, query: OrderSearch) -> UserOrders | None:
+        if await self.user(user_id) is None:
+            return None
+        orders = await self.orders(query, user_id=user_id)
+        # Deliberate N+1: load every line item for each order to compute its item count.
+        items = [
+            (order, len(await self.order_items(order.id)))
+            for order in orders[: query.limit]
+        ]
+        return items, len(orders) > query.limit
 
     async def orders(
         self, query: OrderSearch, user_id: int | None = None
@@ -89,6 +94,12 @@ class BaselineRepository:
             select(Payment).where(Payment.order_id == order_id).order_by(Payment.id)
         )
         return (await self.session.scalars(statement)).all()
+
+    async def order_details(self, order_id: int) -> OrderDetailsRows | None:
+        order = await self.order(order_id)
+        if order is None:
+            return None
+        return order, await self.order_items(order_id), await self.payments(order_id)
 
     async def sales(
         self, query: SalesQuery, statuses: tuple[OrderStatus, ...]

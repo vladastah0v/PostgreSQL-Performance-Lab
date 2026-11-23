@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import BigInteger, CheckConstraint, ForeignKey, String, text
+from sqlalchemy import BigInteger, CheckConstraint, ForeignKey, Index, String, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -28,3 +28,11 @@ class UserEvent(Base):
     created_at: Mapped[CreatedAt]
 
     user: Mapped[User] = relationship(back_populates="events", lazy="raise")
+
+
+Index(
+    "ix_user_events_user_created_id",
+    UserEvent.user_id,
+    UserEvent.created_at,
+    UserEvent.id,
+)

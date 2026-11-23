@@ -1,0 +1,179 @@
+{
+  "dataset": {
+    "counts": {
+      "users": 10000,
+      "orders": 100000,
+      "payments": 100000,
+      "products": 1000,
+      "categories": 20,
+      "order_items": 283240,
+      "user_events": 500000,
+      "order_status_history": 200000
+    },
+    "version": 1,
+    "parameters": {
+      "seed": 42,
+      "users": 10000,
+      "events": 500000,
+      "orders": 100000
+    }
+  },
+  "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)",
+  "database_settings": {
+    "server_version": "16.16 (Debian 16.16-1.pgdg13+1)",
+    "TimeZone": "UTC",
+    "shared_buffers": "128MB",
+    "work_mem": "4MB",
+    "max_parallel_workers_per_gather": "2",
+    "statement_timeout": "30s",
+    "alembic_revision": "0001"
+  },
+  "rows_per_statement": 1000,
+  "repetitions_per_revision": 3,
+  "transaction": "rollback",
+  "sql": "orders-write.sql",
+  "index_builds": [
+    {
+      "name": "ix_order_items_order_id_id",
+      "size_bytes": 8953856,
+      "build_ms": 261.369
+    },
+    {
+      "name": "ix_orders_created_id",
+      "size_bytes": 3178496,
+      "build_ms": 82.946
+    },
+    {
+      "name": "ix_orders_sales_created_cover",
+      "size_bytes": 3317760,
+      "build_ms": 84.601
+    },
+    {
+      "name": "ix_orders_status_created_id",
+      "size_bytes": 5021696,
+      "build_ms": 220.434
+    },
+    {
+      "name": "ix_orders_user_created_id",
+      "size_bytes": 4079616,
+      "build_ms": 145.126
+    },
+    {
+      "name": "ix_payments_order_id_id",
+      "size_bytes": 3178496,
+      "build_ms": 65.413
+    },
+    {
+      "name": "ix_user_events_user_created_id",
+      "size_bytes": 20307968,
+      "build_ms": 618.268
+    },
+    {
+      "name": "ix_users_city_status_id",
+      "size_bytes": 434176,
+      "build_ms": 50.26
+    }
+  ],
+  "write": {
+    "0001": {
+      "insert": {
+        "runs": [
+          {
+            "execution_ms": 24.127,
+            "wal_bytes": 186828,
+            "shared_hit_blocks": 3097,
+            "shared_read_blocks": 4
+          },
+          {
+            "execution_ms": 24.856,
+            "wal_bytes": 175388,
+            "shared_hit_blocks": 5086,
+            "shared_read_blocks": 0
+          },
+          {
+            "execution_ms": 25.437,
+            "wal_bytes": 175249,
+            "shared_hit_blocks": 5115,
+            "shared_read_blocks": 0
+          }
+        ],
+        "median_ms": 24.856,
+        "median_wal_bytes": 175388
+      },
+      "update": {
+        "runs": [
+          {
+            "execution_ms": 9.962,
+            "wal_bytes": 241557,
+            "shared_hit_blocks": 7062,
+            "shared_read_blocks": 0
+          },
+          {
+            "execution_ms": 10.862,
+            "wal_bytes": 240591,
+            "shared_hit_blocks": 8386,
+            "shared_read_blocks": 0
+          },
+          {
+            "execution_ms": 10.951,
+            "wal_bytes": 240401,
+            "shared_hit_blocks": 8388,
+            "shared_read_blocks": 0
+          }
+        ],
+        "median_ms": 10.862,
+        "median_wal_bytes": 240591
+      }
+    },
+    "0002": {
+      "insert": {
+        "runs": [
+          {
+            "execution_ms": 72.32,
+            "wal_bytes": 489900,
+            "shared_hit_blocks": 13283,
+            "shared_read_blocks": 1241
+          },
+          {
+            "execution_ms": 313.672,
+            "wal_bytes": 478688,
+            "shared_hit_blocks": 16509,
+            "shared_read_blocks": 0
+          },
+          {
+            "execution_ms": 51.846,
+            "wal_bytes": 497473,
+            "shared_hit_blocks": 16538,
+            "shared_read_blocks": 0
+          }
+        ],
+        "median_ms": 72.32,
+        "median_wal_bytes": 489900
+      },
+      "update": {
+        "runs": [
+          {
+            "execution_ms": 27.793,
+            "wal_bytes": 567541,
+            "shared_hit_blocks": 16256,
+            "shared_read_blocks": 11
+          },
+          {
+            "execution_ms": 60.239,
+            "wal_bytes": 479800,
+            "shared_hit_blocks": 17644,
+            "shared_read_blocks": 0
+          },
+          {
+            "execution_ms": 36.251,
+            "wal_bytes": 486534,
+            "shared_hit_blocks": 17799,
+            "shared_read_blocks": 0
+          }
+        ],
+        "median_ms": 36.251,
+        "median_wal_bytes": 486534
+      }
+    }
+  }
+}

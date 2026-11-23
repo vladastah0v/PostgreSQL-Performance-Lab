@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
-from sqlalchemy import BigInteger, CheckConstraint, DateTime, ForeignKey
+from sqlalchemy import BigInteger, CheckConstraint, DateTime, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -47,3 +47,6 @@ class Payment(Base):
     created_at: Mapped[CreatedAt]
 
     order: Mapped[Order] = relationship(back_populates="payments", lazy="raise")
+
+
+Index("ix_payments_order_id_id", Payment.order_id, Payment.id)

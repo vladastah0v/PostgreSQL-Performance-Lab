@@ -5,6 +5,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 from sqlalchemy.exc import TimeoutError as PoolTimeoutError
 
+from app.schemas.cursors import InvalidCursor
+
 logger = logging.getLogger(__name__)
 
 
@@ -14,6 +16,12 @@ class ResourceNotFound(Exception):
 
 async def resource_not_found(request: Request, error: ResourceNotFound) -> JSONResponse:
     return JSONResponse({"detail": str(error)}, status_code=status.HTTP_404_NOT_FOUND)
+
+
+async def invalid_cursor(request: Request, error: InvalidCursor) -> JSONResponse:
+    return JSONResponse(
+        {"detail": str(error)}, status_code=status.HTTP_422_UNPROCESSABLE_CONTENT
+    )
 
 
 async def database_error(request: Request, error: SQLAlchemyError) -> JSONResponse:

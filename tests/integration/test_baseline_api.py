@@ -317,3 +317,167 @@ async def test_missing_entity_returns_404(client: httpx.AsyncClient, path: str) 
 )
 async def test_invalid_filters_return_422(client: httpx.AsyncClient, path: str) -> None:
     assert (await client.get(path)).status_code == 422
+
+
+OPTIMIZED = "http://localhost/api/v1/optimized/"
+
+
+@pytest.mark.parametrize(
+    "scenario",
+    [
+        "users",
+        "orders",
+        "max_date",
+        "user_orders",
+        "details",
+        "daily_sales",
+        "monthly_sales",
+        "top_products",
+        "customers",
+        "events",
+        "empty_customers",
+        "missing_order",
+        "missing_user",
+    ],
+)
+async def test_optimized_offset_responses_match_baseline(
+    client: httpx.AsyncClient, records: Records, scenario: str
+) -> None:
+    path, params = {
+        "users": ("users/search", {"email": records.token, "limit": 1, "offset": 1}),
+        "orders": ("orders", {**DAY_PARAMS, "limit": 1, "offset": 1}),
+        "max_date": ("orders", {"date_to": "9999-12-31", "limit": 1}),
+        "user_orders": (
+            f"users/{records.user.id}/orders",
+            {**DAY_PARAMS, "limit": 1, "offset": 1},
+        ),
+        "details": (f"orders/{records.first_order.id}/details", {}),
+        "daily_sales": ("analytics/sales", DAY_PARAMS),
+        "monthly_sales": ("analytics/sales", {**DAY_PARAMS, "period": "month"}),
+        "top_products": ("analytics/top-products", {**DAY_PARAMS, "limit": 1}),
+        "customers": ("analytics/customers", DAY_PARAMS),
+        "events": (
+            "events",
+            {
+                **DAY_PARAMS,
+                "user_id": records.user.id,
+                "event_type": "product_view",
+                "limit": 1,
+                "offset": 1,
+            },
+        ),
+        "empty_customers": ("analytics/customers", {"date_from": "2036-01-01"}),
+        "missing_order": ("orders/9223372036854775807/details", {}),
+        "missing_user": ("users/9223372036854775807/orders", {}),
+    }[scenario]
+    baseline = await client.get(path, params=params)
+    optimized = await client.get(OPTIMIZED + path, params=params)
+    expected_status = 404 if scenario.startswith("missing_") else 200
+    assert optimized.status_code == baseline.status_code == expected_status
+    assert optimized.json() == baseline.json()
+    assert "X-Next-Cursor" not in optimized.headers
+
+
+@pytest.mark.parametrize("scenario", ["users", "orders", "user_orders", "events"])
+async def test_keyset_pagination_returns_the_same_rows_in_the_same_order(
+    client: httpx.AsyncClient, records: Records, scenario: str
+) -> None:
+    path, params = {
+        "users": ("users/search", {"email": records.token}),
+        "orders": ("orders", DAY_PARAMS),
+        "user_orders": (f"users/{records.user.id}/orders", DAY_PARAMS),
+        "events": (
+            "events",
+            {**DAY_PARAMS, "user_id": records.user.id, "event_type": "product_view"},
+        ),
+    }[scenario]
+    baseline = await client.get(path, params=params)
+    assert baseline.status_code == 200
+    expected = baseline.json()["items"]
+    assert len(expected) > 1
+
+    cursor = "start"
+    for index, item in enumerate(expected):
+        response = await client.get(
+            OPTIMIZED + path, params={**params, "limit": 1, "cursor": cursor}
+        )
+        assert response.status_code == 200
+        page = response.json()
+        assert page["items"] == [item]
+        assert page["offset"] == 0
+        assert page["has_more"] == (index < len(expected) - 1)
+        assert ("X-Next-Cursor" in response.headers) == page["has_more"]
+        cursor = response.headers.get("X-Next-Cursor")
+
+
+async def test_cursor_rejects_invalid_tokens_and_changed_filters(
+    client: httpx.AsyncClient, records: Records
+) -> None:
+    route = OPTIMIZED + "orders"
+    first = await client.get(
+        route, params={**DAY_PARAMS, "limit": 1, "cursor": "start"}
+    )
+    assert first.status_code == 200
+    cursor = first.headers["X-Next-Cursor"]
+
+    bad_queries = [
+        {**DAY_PARAMS, "cursor": cursor, "status": "paid"},
+        {**DAY_PARAMS, "cursor": "start", "offset": 1},
+        {**DAY_PARAMS, "cursor": "not-a-cursor"},
+    ]
+    for params in bad_queries:
+        assert (await client.get(route, params=params)).status_code == 422
+    assert (
+        await client.get(
+            OPTIMIZED + f"users/{records.user.id}/orders",
+            params={**DAY_PARAMS, "cursor": cursor},
+        )
+    ).status_code == 422
+
+
+async def test_optimized_order_details_keep_empty_relationships(
+    client: httpx.AsyncClient, db_session: AsyncSession, records: Records
+) -> None:
+    order = Order(
+        user_id=records.user.id,
+        total_amount=Decimal("0.00"),
+        created_at=DAY,
+        updated_at=DAY,
+    )
+    db_session.add(order)
+    await db_session.flush()
+    route = f"orders/{order.id}/details"
+    db_session.expunge_all()
+    baseline = await client.get(route)
+    optimized = await client.get(OPTIMIZED + route)
+    assert optimized.status_code == baseline.status_code == 200
+    assert optimized.json() == baseline.json()
+    assert optimized.json()["items"] == optimized.json()["payments"] == []
+
+
+async def test_optimized_history_loads_all_item_counts_in_one_query(
+    client: httpx.AsyncClient, db_session: AsyncSession, records: Records
+) -> None:
+    connection = await db_session.connection()
+    statements = []
+
+    def capture(
+        connection, cursor, statement, parameters, context, executemany
+    ) -> None:
+        if statement.startswith("SELECT "):
+            statements.append(statement)
+
+    event.listen(connection.sync_connection, "before_cursor_execute", capture)
+    try:
+        response = await client.get(
+            OPTIMIZED + f"users/{records.user.id}/orders", params={"limit": 3}
+        )
+    finally:
+        event.remove(connection.sync_connection, "before_cursor_execute", capture)
+    assert response.status_code == 200
+    assert {row["id"]: row["item_count"] for row in response.json()["items"]} == {
+        records.first_order.id: 2,
+        records.second_order.id: 1,
+        records.pending_order.id: 1,
+    }
+    assert len(statements) == 3

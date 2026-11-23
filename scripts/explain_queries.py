@@ -4,6 +4,7 @@ import json
 from collections.abc import Awaitable, Callable
 from datetime import UTC, date, datetime
 from pathlib import Path
+from statistics import median
 from typing import Any
 
 from sqlalchemy import event, text
@@ -13,7 +14,10 @@ from app.core.config import Settings
 from app.core.database import create_engine
 from app.models import OrderStatus, UserStatus
 from app.repositories.baseline.queries import BaselineRepository
+from app.repositories.optimized.queries import OptimizedRepository
+from app.schemas.cursors import encode_cursor
 from app.schemas.parameters import (
+    CursorOrderSearch,
     DateRange,
     EventSearch,
     OrderSearch,
@@ -21,9 +25,21 @@ from app.schemas.parameters import (
     TopProductsQuery,
     UserSearch,
 )
-from app.services.baseline import BaselineService
+from app.services.commerce import CommerceService
 
-type Operation = Callable[[BaselineService], Awaitable[object]]
+type Operation = Callable[[CommerceService], Awaitable[object]]
+
+REPOSITORIES = {"baseline": BaselineRepository, "optimized": OptimizedRepository}
+
+
+def orders_sample(offset: int = 8_000, limit: int = 20) -> OrderSearch:
+    return OrderSearch(
+        status=OrderStatus.DELIVERED,
+        date_from=date(2025, 1, 1),
+        date_to=date(2025, 12, 31),
+        offset=offset,
+        limit=limit,
+    )
 
 
 def sample_operations(user_id: int, order_id: int) -> dict[str, Operation]:
@@ -35,11 +51,7 @@ def sample_operations(user_id: int, order_id: int) -> dict[str, Operation]:
         f"users/{user_id}/orders": lambda service: service.user_orders(
             user_id, OrderSearch()
         ),
-        "orders": lambda service: service.orders(
-            OrderSearch(
-                status=OrderStatus.DELIVERED, date_from=start, date_to=end, offset=8_000
-            )
-        ),
+        "orders": lambda service: service.orders(orders_sample()),
         f"orders/{order_id}/details": lambda service: service.order_details(order_id),
         "analytics/sales": lambda service: service.sales(
             SalesQuery(period="month", date_from=start, date_to=end)
@@ -56,7 +68,9 @@ def sample_operations(user_id: int, order_id: int) -> dict[str, Operation]:
     }
 
 
-async def explain_operation(connection: AsyncConnection, operation: Operation) -> dict:
+async def explain_operation(
+    connection: AsyncConnection, operation: Operation, implementation: str
+) -> dict:
     parameters_by_statement: dict[str, list[Any]] = {}
 
     def capture(
@@ -68,7 +82,7 @@ async def explain_operation(connection: AsyncConnection, operation: Operation) -
     event.listen(connection.sync_connection, "before_cursor_execute", capture)
     try:
         async with AsyncSession(bind=connection) as session:
-            await operation(BaselineService(BaselineRepository(session)))
+            await operation(CommerceService(REPOSITORIES[implementation](session)))
     finally:
         event.remove(connection.sync_connection, "before_cursor_execute", capture)
 
@@ -94,7 +108,56 @@ async def explain_operation(connection: AsyncConnection, operation: Operation) -
     }
 
 
-async def collect_plans(user_id: int, order_id: int) -> dict:
+async def compare_pagination(connection: AsyncConnection, offset: int) -> dict:
+    offset_query = orders_sample(offset=offset)
+    async with AsyncSession(bind=connection) as session:
+        service = CommerceService(OptimizedRepository(session))
+        preceding = await service.orders(orders_sample(offset=offset - 1, limit=1))
+        if not preceding.items:
+            raise ValueError("The dataset does not contain the requested offset")
+        anchor = preceding.items[0]
+        cursor_query = CursorOrderSearch(
+            **offset_query.model_dump(exclude={"offset"}),
+            cursor=encode_cursor(offset_query, "orders", anchor.id, anchor.created_at),
+        )
+        offset_page = await service.orders(offset_query)
+        cursor_page = await service.orders(cursor_query)
+    if (
+        not offset_page.items
+        or offset_page.items != cursor_page.items
+        or offset_page.has_more != cursor_page.has_more
+    ):
+        raise ValueError("Offset and keyset did not return the same nonempty page")
+
+    queries = {"offset": offset_query, "keyset": cursor_query}
+    runs = {name: [] for name in queries}
+    plans = {}
+    for iteration in range(5):
+        for name in list(queries) if iteration % 2 == 0 else reversed(queries):
+            query = queries[name]
+            captured = await explain_operation(
+                connection, lambda service: service.orders(query), "optimized"
+            )
+            entry = captured["statements"][0]
+            runs[name].append(entry["explain"][0]["Execution Time"])
+            if iteration == 0:
+                plans[name] = entry
+    return {
+        "query": offset_query.model_dump(mode="json"),
+        "row_ids": [order.id for order in offset_page.items],
+        "anchor": {"id": anchor.id, "created_at": anchor.created_at.isoformat()},
+        "execution_time_ms": runs,
+        "median_ms": {name: median(times) for name, times in runs.items()},
+        "plans": plans,
+    }
+
+
+async def collect_plans(
+    user_id: int,
+    order_id: int,
+    implementation: str = "baseline",
+    pagination_offset: int | None = None,
+) -> dict:
     engine = create_engine(Settings())
     try:
         async with engine.begin() as connection:
@@ -112,6 +175,9 @@ async def collect_plans(user_id: int, order_id: int) -> dict:
                     "statement_timeout",
                 )
             }
+            database["alembic_revision"] = await connection.scalar(
+                text("SELECT version_num FROM alembic_version")
+            )
             dataset = None
             if await connection.scalar(
                 text("SELECT to_regclass('lab_data.dataset_manifest') IS NOT NULL")
@@ -120,37 +186,75 @@ async def collect_plans(user_id: int, order_id: int) -> dict:
                     text("SELECT document FROM lab_data.dataset_manifest")
                 )
             operations = {
-                name: await explain_operation(connection, operation)
+                name: await explain_operation(connection, operation, implementation)
                 for name, operation in sample_operations(user_id, order_id).items()
             }
+            if implementation == "optimized":
+                operations[
+                    "users/search (city and rare status)"
+                ] = await explain_operation(
+                    connection,
+                    lambda service: service.search_users(
+                        UserSearch(city="Osaka", status=UserStatus.BLOCKED)
+                    ),
+                    implementation,
+                )
+                operations["orders (latest without status)"] = await explain_operation(
+                    connection,
+                    lambda service: service.orders(OrderSearch()),
+                    implementation,
+                )
+            pagination = (
+                await compare_pagination(connection, pagination_offset)
+                if pagination_offset is not None
+                else None
+            )
     finally:
         await engine.dispose()
     return {
         "measured_at_utc": datetime.now(UTC).isoformat(),
         "database": database,
+        "implementation": implementation,
         "dataset": dataset,
         "operations": operations,
+        **({"pagination": pagination} if pagination is not None else {}),
     }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Capture EXPLAIN plans for the baseline repository queries."
+        description="Capture EXPLAIN plans for the baseline or optimized repository queries."
     )
     parser.add_argument("--user-id", type=int, default=1)
     parser.add_argument("--order-id", type=int, default=1)
+    parser.add_argument("--implementation", choices=REPOSITORIES, default="baseline")
     parser.add_argument(
-        "--output",
-        type=Path,
-        default=Path("experiments/sql/baseline/initial-plans.json"),
+        "--pagination-offset",
+        type=int,
+        help="Compare offset and keyset on the same optimized order page",
     )
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    result = asyncio.run(collect_plans(args.user_id, args.order_id))
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
+    if args.pagination_offset is not None and (
+        args.implementation != "optimized"
+        or not 1 <= args.pagination_offset <= 2**31 - 1
+    ):
+        parser.error(
+            "--pagination-offset requires --implementation optimized and a positive offset"
+        )
+    output = args.output or Path(
+        f"experiments/sql/{args.implementation}/initial-plans.json"
+    )
+    result = asyncio.run(
+        collect_plans(
+            args.user_id, args.order_id, args.implementation, args.pagination_offset
+        )
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
         json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8"
     )
-    print(args.output)
+    print(output)
 
 
 if __name__ == "__main__":

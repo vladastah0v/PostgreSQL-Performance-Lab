@@ -13,11 +13,18 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.api.baseline.routes import router as baseline_router
+from app.api.optimized.routes import router as optimized_router
 from app.core.config import Settings
 from app.core.database import create_engine, get_db_session
-from app.core.exceptions import ResourceNotFound, database_error, resource_not_found
+from app.core.exceptions import (
+    ResourceNotFound,
+    database_error,
+    invalid_cursor,
+    resource_not_found,
+)
 from app.core.lab_access import docker_gateway
 from app.core.redis import create_redis, get_redis
+from app.schemas.cursors import InvalidCursor
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +48,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(title="PostgreSQL Performance Lab", lifespan=lifespan)
     app.add_exception_handler(ResourceNotFound, resource_not_found)
+    app.add_exception_handler(InvalidCursor, invalid_cursor)
     app.add_exception_handler(SQLAlchemyError, database_error)
+    app.include_router(optimized_router)
     if settings.lab_mode:
         app.state.lab_gateway = (
             docker_gateway() if settings.lab_allow_docker_gateway else None

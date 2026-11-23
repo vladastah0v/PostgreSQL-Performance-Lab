@@ -26,7 +26,7 @@ from app.schemas.responses import (
     UserOrder,
     UserSummary,
 )
-from app.services.baseline import BaselineService
+from app.services.commerce import CommerceService
 
 router = APIRouter(
     prefix="/api/v1/baseline",
@@ -38,11 +38,11 @@ EntityId = Annotated[int, Path(ge=1, le=MAX_ID)]
 
 async def get_service(
     session: Annotated[AsyncSession, Depends(get_db_session)],
-) -> BaselineService:
-    return BaselineService(BaselineRepository(session))
+) -> CommerceService:
+    return CommerceService(BaselineRepository(session))
 
 
-Service = Annotated[BaselineService, Depends(get_service)]
+Service = Annotated[CommerceService, Depends(get_service)]
 
 
 @router.get("/users/search")

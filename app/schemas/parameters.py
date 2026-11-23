@@ -54,3 +54,25 @@ class SalesQuery(DateRange):
 
 class TopProductsQuery(DateRange):
     limit: int = Field(default=20, ge=1, le=100)
+
+
+class CursorPagination(OffsetParams):
+    cursor: str | None = Field(default=None, min_length=1, max_length=512)
+
+    @model_validator(mode="after")
+    def validate_pagination(self) -> Self:
+        if self.cursor is not None and self.offset != 0:
+            raise ValueError("cursor cannot be combined with a nonzero offset")
+        return self
+
+
+class CursorUserSearch(UserSearch, CursorPagination):
+    pass
+
+
+class CursorOrderSearch(OrderSearch, CursorPagination):
+    pass
+
+
+class CursorEventSearch(EventSearch, CursorPagination):
+    pass
