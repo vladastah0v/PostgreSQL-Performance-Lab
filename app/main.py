@@ -12,8 +12,11 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.api.baseline.routes import router as baseline_router
 from app.core.config import Settings
 from app.core.database import create_engine, get_db_session
+from app.core.exceptions import ResourceNotFound, database_error, resource_not_found
+from app.core.lab_access import docker_gateway
 from app.core.redis import create_redis, get_redis
 
 logger = logging.getLogger(__name__)
@@ -37,6 +40,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             yield
 
     app = FastAPI(title="PostgreSQL Performance Lab", lifespan=lifespan)
+    app.add_exception_handler(ResourceNotFound, resource_not_found)
+    app.add_exception_handler(SQLAlchemyError, database_error)
+    if settings.lab_mode:
+        app.state.lab_gateway = (
+            docker_gateway() if settings.lab_allow_docker_gateway else None
+        )
+        app.include_router(baseline_router)
 
     @app.get("/health/live", tags=["health"])
     async def live() -> dict[str, str]:

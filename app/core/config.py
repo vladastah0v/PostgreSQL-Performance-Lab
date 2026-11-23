@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     db_statement_timeout_ms: int = Field(default=30_000, ge=1)
     healthcheck_timeout: float = Field(default=2, gt=0)
     lab_mode: bool = False
+    lab_allow_docker_gateway: bool = False
 
     @property
     def database_url(self) -> URL:

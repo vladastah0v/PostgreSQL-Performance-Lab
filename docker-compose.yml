@@ -17,6 +17,7 @@ services:
       DB_STATEMENT_TIMEOUT_MS: ${DB_STATEMENT_TIMEOUT_MS:-30000}
       HEALTHCHECK_TIMEOUT: ${HEALTHCHECK_TIMEOUT:-2}
       LAB_MODE: ${LAB_MODE:-false}
+      LAB_ALLOW_DOCKER_GATEWAY: "true"
     ports:
       - "127.0.0.1:${API_PORT:-8008}:8000"
     depends_on:
