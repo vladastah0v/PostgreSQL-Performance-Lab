@@ -17,6 +17,7 @@ RUN groupadd --gid 10001 lab \
 COPY --from=dependencies /lab/.venv /lab/.venv
 COPY app ./app
 COPY migrations ./migrations
+COPY scripts ./scripts
 COPY alembic.ini ./
 
 USER lab
