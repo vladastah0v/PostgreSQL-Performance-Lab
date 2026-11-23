@@ -1,0 +1,24 @@
+FROM python:3.12-slim AS dependencies
+
+COPY --from=ghcr.io/astral-sh/uv:0.13.7 /uv /bin/uv
+WORKDIR /lab
+ENV UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never
+COPY pyproject.toml uv.lock .python-version ./
+RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-dev
+
+FROM python:3.12-slim
+
+ENV PATH="/lab/.venv/bin:$PATH" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+WORKDIR /lab
+RUN groupadd --gid 10001 lab \
+    && useradd --uid 10001 --gid lab --no-create-home --shell /usr/sbin/nologin lab
+COPY --from=dependencies /lab/.venv /lab/.venv
+COPY app ./app
+COPY migrations ./migrations
+COPY alembic.ini ./
+
+USER lab
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-proxy-headers", "--log-config", "app/core/logging.json"]
