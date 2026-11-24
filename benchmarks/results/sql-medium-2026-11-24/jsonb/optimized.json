@@ -1,0 +1,60 @@
+{
+  "row_count": 1,
+  "result_sha256": "b8ac5abef53b83e6a3ecf5e7b3e7e5d36324fe78140c920904b0ddc67baf022d",
+  "runs": [
+    {
+      "repetition": 1,
+      "sql_count": 1,
+      "execution_ms": 13.981,
+      "planning_ms": 0.159,
+      "shared_hit_blocks": 3182,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 2,
+      "sql_count": 1,
+      "execution_ms": 15.132,
+      "planning_ms": 0.181,
+      "shared_hit_blocks": 3182,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 3,
+      "sql_count": 1,
+      "execution_ms": 11.267,
+      "planning_ms": 0.345,
+      "shared_hit_blocks": 3182,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 4,
+      "sql_count": 1,
+      "execution_ms": 9.979,
+      "planning_ms": 0.166,
+      "shared_hit_blocks": 3182,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 5,
+      "sql_count": 1,
+      "execution_ms": 15.191,
+      "planning_ms": 0.258,
+      "shared_hit_blocks": 3182,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    }
+  ],
+  "median_ms": 13.981,
+  "min_ms": 9.979,
+  "max_ms": 15.191,
+  "index": {
+    "name": "lab_exp_event_payload",
+    "sql": "CREATE INDEX lab_exp_event_payload ON public.user_events\nUSING gin (payload jsonb_path_ops)",
+    "build_wall_ms": 838.443,
+    "size_bytes": 2260992
+  }
+}

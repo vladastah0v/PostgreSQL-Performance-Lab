@@ -1,0 +1,271 @@
+[
+  {
+    "sql": "SELECT users.id \nFROM users \nWHERE users.id = $1::BIGINT",
+    "parameters": [
+      1
+    ],
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Index Only Scan",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Scan Direction": "Forward",
+          "Index Name": "pk_users",
+          "Relation Name": "users",
+          "Alias": "users",
+          "Startup Cost": 0.29,
+          "Total Cost": 8.3,
+          "Plan Rows": 1,
+          "Plan Width": 8,
+          "Actual Startup Time": 0.021,
+          "Actual Total Time": 0.023,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Index Cond": "(id = '1'::bigint)",
+          "Rows Removed by Index Recheck": 0,
+          "Heap Fetches": 0,
+          "Shared Hit Blocks": 3,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.099,
+        "Triggers": [],
+        "Execution Time": 0.046
+      }
+    ]
+  },
+  {
+    "sql": "SELECT orders.id, orders.user_id, orders.status, orders.total_amount, orders.created_at \nFROM orders \nWHERE orders.user_id = $1::BIGINT ORDER BY orders.created_at DESC, orders.id DESC \n LIMIT $2::INTEGER",
+    "parameters": [
+      1,
+      21
+    ],
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 2260.24,
+          "Total Cost": 2260.27,
+          "Plan Rows": 13,
+          "Plan Width": 39,
+          "Actual Startup Time": 17.182,
+          "Actual Total Time": 17.19,
+          "Actual Rows": 21,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 1010,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 2260.24,
+              "Total Cost": 2260.27,
+              "Plan Rows": 13,
+              "Plan Width": 39,
+              "Actual Startup Time": 17.18,
+              "Actual Total Time": 17.184,
+              "Actual Rows": 21,
+              "Actual Loops": 1,
+              "Sort Key": [
+                "created_at DESC",
+                "id DESC"
+              ],
+              "Sort Method": "top-N heapsort",
+              "Sort Space Used": 27,
+              "Sort Space Type": "Memory",
+              "Shared Hit Blocks": 1010,
+              "Shared Read Blocks": 0,
+              "Shared Dirtied Blocks": 0,
+              "Shared Written Blocks": 0,
+              "Local Hit Blocks": 0,
+              "Local Read Blocks": 0,
+              "Local Dirtied Blocks": 0,
+              "Local Written Blocks": 0,
+              "Temp Read Blocks": 0,
+              "Temp Written Blocks": 0,
+              "Plans": [
+                {
+                  "Node Type": "Seq Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Relation Name": "orders",
+                  "Alias": "orders",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 2260.0,
+                  "Plan Rows": 13,
+                  "Plan Width": 39,
+                  "Actual Startup Time": 0.074,
+                  "Actual Total Time": 17.096,
+                  "Actual Rows": 46,
+                  "Actual Loops": 1,
+                  "Filter": "(user_id = '1'::bigint)",
+                  "Rows Removed by Filter": 99954,
+                  "Shared Hit Blocks": 1010,
+                  "Shared Read Blocks": 0,
+                  "Shared Dirtied Blocks": 0,
+                  "Shared Written Blocks": 0,
+                  "Local Hit Blocks": 0,
+                  "Local Read Blocks": 0,
+                  "Local Dirtied Blocks": 0,
+                  "Local Written Blocks": 0,
+                  "Temp Read Blocks": 0,
+                  "Temp Written Blocks": 0
+                }
+              ]
+            }
+          ]
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.129,
+        "Triggers": [],
+        "Execution Time": 17.34
+      }
+    ]
+  },
+  {
+    "sql": "SELECT order_items.order_id, order_items.id \nFROM order_items \nWHERE order_items.order_id IN ($1::BIGINT, $2::BIGINT, $3::BIGINT, $4::BIGINT, $5::BIGINT, $6::BIGINT, $7::BIGINT, $8::BIGINT, $9::BIGINT, $10::BIGINT, $11::BIGINT, $12::BIGINT, $13::BIGINT, $14::BIGINT, $15::BIGINT, $16::BIGINT, $17::BIGINT, $18::BIGINT, $19::BIGINT, $20::BIGINT, $21::BIGINT)",
+    "parameters": [
+      89541,
+      76205,
+      39000,
+      54512,
+      46838,
+      22053,
+      91993,
+      77601,
+      94138,
+      97935,
+      69566,
+      48059,
+      76083,
+      19858,
+      3278,
+      11925,
+      88986,
+      34783,
+      96251,
+      32818,
+      76484
+    ],
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Gather",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 1000.05,
+          "Total Cost": 5877.53,
+          "Plan Rows": 63,
+          "Plan Width": 16,
+          "Actual Startup Time": 2.517,
+          "Actual Total Time": 37.191,
+          "Actual Rows": 62,
+          "Actual Loops": 1,
+          "Workers Planned": 1,
+          "Workers Launched": 1,
+          "Single Copy": false,
+          "Shared Hit Blocks": 2372,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "Plans": [
+            {
+              "Node Type": "Seq Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": true,
+              "Async Capable": false,
+              "Relation Name": "order_items",
+              "Alias": "order_items",
+              "Startup Cost": 0.05,
+              "Total Cost": 4871.23,
+              "Plan Rows": 37,
+              "Plan Width": 16,
+              "Actual Startup Time": 2.449,
+              "Actual Total Time": 28.969,
+              "Actual Rows": 31,
+              "Actual Loops": 2,
+              "Filter": "(order_id = ANY ('{89541,76205,39000,54512,46838,22053,91993,77601,94138,97935,69566,48059,76083,19858,3278,11925,88986,34783,96251,32818,76484}'::bigint[]))",
+              "Rows Removed by Filter": 141589,
+              "Shared Hit Blocks": 2372,
+              "Shared Read Blocks": 0,
+              "Shared Dirtied Blocks": 0,
+              "Shared Written Blocks": 0,
+              "Local Hit Blocks": 0,
+              "Local Read Blocks": 0,
+              "Local Dirtied Blocks": 0,
+              "Local Written Blocks": 0,
+              "Temp Read Blocks": 0,
+              "Temp Written Blocks": 0,
+              "Workers": []
+            }
+          ]
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.158,
+        "Triggers": [],
+        "Execution Time": 37.239
+      }
+    ]
+  }
+]

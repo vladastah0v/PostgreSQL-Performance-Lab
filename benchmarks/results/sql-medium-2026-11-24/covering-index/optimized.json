@@ -1,0 +1,60 @@
+{
+  "row_count": 1395,
+  "result_sha256": "2bd97dbdaff4059c3d836b746ed0b04fd76011ac1987aa10ba1c2356c20eeea3",
+  "runs": [
+    {
+      "repetition": 1,
+      "sql_count": 1,
+      "execution_ms": 0.726,
+      "planning_ms": 0.171,
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 2,
+      "sql_count": 1,
+      "execution_ms": 0.795,
+      "planning_ms": 0.183,
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 3,
+      "sql_count": 1,
+      "execution_ms": 0.774,
+      "planning_ms": 0.168,
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 4,
+      "sql_count": 1,
+      "execution_ms": 0.578,
+      "planning_ms": 0.178,
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 5,
+      "sql_count": 1,
+      "execution_ms": 0.578,
+      "planning_ms": 0.178,
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    }
+  ],
+  "median_ms": 0.726,
+  "min_ms": 0.578,
+  "max_ms": 0.795,
+  "index": {
+    "name": "lab_exp_items",
+    "sql": "CREATE INDEX lab_exp_items ON public.order_items (order_id, id)\nINCLUDE (product_id, quantity, unit_price)",
+    "build_wall_ms": 588.16,
+    "size_bytes": 16670720
+  }
+}

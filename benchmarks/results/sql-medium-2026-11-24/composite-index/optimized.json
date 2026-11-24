@@ -1,0 +1,60 @@
+{
+  "row_count": 100,
+  "result_sha256": "24a6bda90a6d32524163c09ee546898ec3cc3ff6600d5d51833f1cbefb2aa6c0",
+  "runs": [
+    {
+      "repetition": 1,
+      "sql_count": 1,
+      "execution_ms": 0.304,
+      "planning_ms": 0.183,
+      "shared_hit_blocks": 103,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 2,
+      "sql_count": 1,
+      "execution_ms": 0.282,
+      "planning_ms": 0.172,
+      "shared_hit_blocks": 103,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 3,
+      "sql_count": 1,
+      "execution_ms": 0.39,
+      "planning_ms": 0.235,
+      "shared_hit_blocks": 103,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 4,
+      "sql_count": 1,
+      "execution_ms": 0.394,
+      "planning_ms": 0.192,
+      "shared_hit_blocks": 103,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 5,
+      "sql_count": 1,
+      "execution_ms": 0.292,
+      "planning_ms": 0.185,
+      "shared_hit_blocks": 103,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    }
+  ],
+  "median_ms": 0.304,
+  "min_ms": 0.282,
+  "max_ms": 0.394,
+  "index": {
+    "name": "lab_exp_orders_status_date",
+    "sql": "CREATE INDEX lab_exp_orders_status_date ON public.orders (status, created_at, id)",
+    "build_wall_ms": 327.838,
+    "size_bytes": 4816896
+  }
+}

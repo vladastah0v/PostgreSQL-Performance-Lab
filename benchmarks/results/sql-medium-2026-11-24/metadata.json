@@ -1,0 +1,53 @@
+{
+  "started_at_utc": "2026-11-24T14:41:20.375596+00:00",
+  "git_commit": "d6b082cf2bd635bb3ebea5435433ff71d34dae2f",
+  "git_worktree_dirty": true,
+  "host": "macOS-15.8.2-x86_64-i386-64bit",
+  "python": "3.12.16",
+  "docker": {
+    "server_version": "29.9.3",
+    "cpus": 2,
+    "memory_bytes": 6189211648
+  },
+  "database": {
+    "database": "performance_lab_sql",
+    "revision": "0001",
+    "settings": {
+      "server_version": "16.16 (Debian 16.16-1.pgdg13+1)",
+      "TimeZone": "UTC",
+      "shared_buffers": "128MB",
+      "work_mem": "4MB",
+      "effective_cache_size": "4GB",
+      "random_page_cost": "4",
+      "max_parallel_workers_per_gather": "2",
+      "jit": "on",
+      "statement_timeout": "30s"
+    },
+    "dataset": {
+      "counts": {
+        "users": 10000,
+        "orders": 100000,
+        "payments": 100000,
+        "products": 1000,
+        "categories": 20,
+        "order_items": 283240,
+        "user_events": 500000,
+        "order_status_history": 200000
+      },
+      "version": 1,
+      "parameters": {
+        "seed": 42,
+        "users": 10000,
+        "events": 500000,
+        "orders": 100000
+      }
+    }
+  },
+  "parameters": {
+    "user_id": 1,
+    "offset": 8000,
+    "repetitions": 5
+  },
+  "cache": "one warmup operation before each variant, shared buffers and OS cache left intact",
+  "measurement": "sum of PostgreSQL Execution Time from EXPLAIN ANALYZE per operation"
+}

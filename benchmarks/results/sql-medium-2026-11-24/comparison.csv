@@ -1,0 +1,9 @@
+experiment,status,rows,before_median_ms,after_median_ms,delta_ms,before_range_ms,after_range_ms,reduction_pct,speedup,before_selects,after_selects
+missing-index,PASSED,12,3.097,0.809,2.288,3.019–3.26,0.528–11.265,73.88,3.828,1,1
+composite-index,PASSED,100,15.918,0.304,15.614,12.858–74.378,0.282–0.394,98.09,52.362,1,1
+n-plus-one,PASSED,20,478.69,54.625,424.065,383.907–904.969,50.034–62.429,88.59,8.763,22,3
+pagination,PASSED,20,8.826,0.094,8.732,6.826–12.279,0.091–0.097,98.93,93.894,1,1
+aggregation,PASSED,20,263.453,193.345,70.108,226.547–598.893,191.522–313.964,26.61,1.363,1,1
+partial-index,PASSED,100,19.789,0.33,19.459,14.28–37.47,0.201–0.497,98.33,59.967,1,1
+covering-index,PASSED,1395,0.574,0.726,-0.152,0.534–0.703,0.578–0.795,-26.48,0.791,1,1
+jsonb,PASSED,1,132.883,13.981,118.902,107.523–531.149,9.979–15.191,89.48,9.505,1,1

@@ -1,0 +1,83 @@
+[
+  {
+    "sql": "SELECT id, user_id, status, total_amount, created_at\nFROM public.orders\nWHERE status = 'delivered'\n  AND created_at >= TIMESTAMPTZ '2025-01-01 00:00:00+00'\n  AND created_at < TIMESTAMPTZ '2026-01-01 00:00:00+00'\nORDER BY created_at DESC, id DESC\nLIMIT $1 OFFSET $2",
+    "parameters": [
+      20,
+      8000
+    ],
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 904.84,
+          "Total Cost": 907.1,
+          "Plan Rows": 20,
+          "Plan Width": 39,
+          "Actual Startup Time": 9.927,
+          "Actual Total Time": 9.945,
+          "Actual Rows": 20,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 8115,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "Plans": [
+            {
+              "Node Type": "Index Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Scan Direction": "Backward",
+              "Index Name": "lab_exp_orders_status_date",
+              "Relation Name": "orders",
+              "Alias": "orders",
+              "Startup Cost": 0.42,
+              "Total Cost": 6072.91,
+              "Plan Rows": 53714,
+              "Plan Width": 39,
+              "Actual Startup Time": 0.041,
+              "Actual Total Time": 9.496,
+              "Actual Rows": 8020,
+              "Actual Loops": 1,
+              "Index Cond": "(((status)::text = 'delivered'::text) AND (created_at >= '2025-01-01 00:00:00+00'::timestamp with time zone) AND (created_at < '2026-01-01 00:00:00+00'::timestamp with time zone))",
+              "Rows Removed by Index Recheck": 0,
+              "Shared Hit Blocks": 8115,
+              "Shared Read Blocks": 0,
+              "Shared Dirtied Blocks": 0,
+              "Shared Written Blocks": 0,
+              "Local Hit Blocks": 0,
+              "Local Read Blocks": 0,
+              "Local Dirtied Blocks": 0,
+              "Local Written Blocks": 0,
+              "Temp Read Blocks": 0,
+              "Temp Written Blocks": 0
+            }
+          ]
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.184,
+        "Triggers": [],
+        "Execution Time": 9.975
+      }
+    ]
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "row_count": 12,
+  "result_sha256": "c42a26ae98b3a4d437494c6790924c0f59c40a09b548aaca84398a57542184dc",
+  "runs": [
+    {
+      "repetition": 1,
+      "sql_count": 1,
+      "execution_ms": 0.661,
+      "planning_ms": 0.158,
+      "shared_hit_blocks": 141,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 2,
+      "sql_count": 1,
+      "execution_ms": 11.265,
+      "planning_ms": 0.169,
+      "shared_hit_blocks": 141,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 3,
+      "sql_count": 1,
+      "execution_ms": 0.809,
+      "planning_ms": 0.224,
+      "shared_hit_blocks": 141,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 4,
+      "sql_count": 1,
+      "execution_ms": 0.855,
+      "planning_ms": 0.373,
+      "shared_hit_blocks": 141,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    },
+    {
+      "repetition": 5,
+      "sql_count": 1,
+      "execution_ms": 0.528,
+      "planning_ms": 0.16,
+      "shared_hit_blocks": 141,
+      "shared_read_blocks": 0,
+      "reported_heap_fetches": 0
+    }
+  ],
+  "median_ms": 0.809,
+  "min_ms": 0.528,
+  "max_ms": 11.265,
+  "index": {
+    "name": "lab_exp_users_city",
+    "sql": "CREATE INDEX lab_exp_users_city ON public.users (lower(city))",
+    "build_wall_ms": 47.461,
+    "size_bytes": 90112
+  }
+}

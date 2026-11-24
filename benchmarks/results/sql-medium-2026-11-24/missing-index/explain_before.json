@@ -1,0 +1,110 @@
+[
+  {
+    "sql": "SELECT id, full_name, email, city, status\nFROM public.users\nWHERE lower(city) = 'osaka' AND status = 'blocked'\nORDER BY id\nLIMIT 100",
+    "parameters": [],
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 317.01,
+          "Total Cost": 317.01,
+          "Plan Rows": 1,
+          "Plan Width": 61,
+          "Actual Startup Time": 3.196,
+          "Actual Total Time": 3.202,
+          "Actual Rows": 12,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 142,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 317.01,
+              "Total Cost": 317.01,
+              "Plan Rows": 1,
+              "Plan Width": 61,
+              "Actual Startup Time": 3.194,
+              "Actual Total Time": 3.197,
+              "Actual Rows": 12,
+              "Actual Loops": 1,
+              "Sort Key": [
+                "id"
+              ],
+              "Sort Method": "quicksort",
+              "Sort Space Used": 26,
+              "Sort Space Type": "Memory",
+              "Shared Hit Blocks": 142,
+              "Shared Read Blocks": 0,
+              "Shared Dirtied Blocks": 0,
+              "Shared Written Blocks": 0,
+              "Local Hit Blocks": 0,
+              "Local Read Blocks": 0,
+              "Local Dirtied Blocks": 0,
+              "Local Written Blocks": 0,
+              "Temp Read Blocks": 0,
+              "Temp Written Blocks": 0,
+              "Plans": [
+                {
+                  "Node Type": "Seq Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Relation Name": "users",
+                  "Alias": "users",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 317.0,
+                  "Plan Rows": 1,
+                  "Plan Width": 61,
+                  "Actual Startup Time": 0.219,
+                  "Actual Total Time": 3.087,
+                  "Actual Rows": 12,
+                  "Actual Loops": 1,
+                  "Filter": "(((status)::text = 'blocked'::text) AND (lower((city)::text) = 'osaka'::text))",
+                  "Rows Removed by Filter": 9988,
+                  "Shared Hit Blocks": 142,
+                  "Shared Read Blocks": 0,
+                  "Shared Dirtied Blocks": 0,
+                  "Shared Written Blocks": 0,
+                  "Local Hit Blocks": 0,
+                  "Local Read Blocks": 0,
+                  "Local Dirtied Blocks": 0,
+                  "Local Written Blocks": 0,
+                  "Temp Read Blocks": 0,
+                  "Temp Written Blocks": 0
+                }
+              ]
+            }
+          ]
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.258,
+        "Triggers": [],
+        "Execution Time": 3.26
+      }
+    ]
+  }
+]

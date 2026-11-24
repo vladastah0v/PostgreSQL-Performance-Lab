@@ -1,0 +1,111 @@
+[
+  {
+    "sql": "SELECT id, user_id, status, total_amount, created_at\nFROM public.orders\nWHERE status = 'pending'\nORDER BY created_at DESC, id DESC\nLIMIT 100",
+    "parameters": [],
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 2449.45,
+          "Total Cost": 2449.7,
+          "Plan Rows": 100,
+          "Plan Width": 39,
+          "Actual Startup Time": 19.714,
+          "Actual Total Time": 19.755,
+          "Actual Rows": 100,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 1010,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 2449.45,
+              "Total Cost": 2461.85,
+              "Plan Rows": 4957,
+              "Plan Width": 39,
+              "Actual Startup Time": 19.712,
+              "Actual Total Time": 19.738,
+              "Actual Rows": 100,
+              "Actual Loops": 1,
+              "Sort Key": [
+                "created_at DESC",
+                "id DESC"
+              ],
+              "Sort Method": "top-N heapsort",
+              "Sort Space Used": 36,
+              "Sort Space Type": "Memory",
+              "Shared Hit Blocks": 1010,
+              "Shared Read Blocks": 0,
+              "Shared Dirtied Blocks": 0,
+              "Shared Written Blocks": 0,
+              "Local Hit Blocks": 0,
+              "Local Read Blocks": 0,
+              "Local Dirtied Blocks": 0,
+              "Local Written Blocks": 0,
+              "Temp Read Blocks": 0,
+              "Temp Written Blocks": 0,
+              "Plans": [
+                {
+                  "Node Type": "Seq Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Relation Name": "orders",
+                  "Alias": "orders",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 2260.0,
+                  "Plan Rows": 4957,
+                  "Plan Width": 39,
+                  "Actual Startup Time": 0.012,
+                  "Actual Total Time": 16.473,
+                  "Actual Rows": 5000,
+                  "Actual Loops": 1,
+                  "Filter": "((status)::text = 'pending'::text)",
+                  "Rows Removed by Filter": 95000,
+                  "Shared Hit Blocks": 1010,
+                  "Shared Read Blocks": 0,
+                  "Shared Dirtied Blocks": 0,
+                  "Shared Written Blocks": 0,
+                  "Local Hit Blocks": 0,
+                  "Local Read Blocks": 0,
+                  "Local Dirtied Blocks": 0,
+                  "Local Written Blocks": 0,
+                  "Temp Read Blocks": 0,
+                  "Temp Written Blocks": 0
+                }
+              ]
+            }
+          ]
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.269,
+        "Triggers": [],
+        "Execution Time": 19.789
+      }
+    ]
+  }
+]

@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import json
 from collections.abc import Awaitable, Callable
+from contextlib import contextmanager
 from datetime import UTC, date, datetime
 from pathlib import Path
 from statistics import median
@@ -68,38 +69,53 @@ def sample_operations(user_id: int, order_id: int) -> dict[str, Operation]:
     }
 
 
-async def explain_operation(
-    connection: AsyncConnection, operation: Operation, implementation: str
-) -> dict:
-    parameters_by_statement: dict[str, list[Any]] = {}
+@contextmanager
+def capture_selects(connection: AsyncConnection):
+    statements = []
 
     def capture(
         connection, cursor, statement, parameters, context, executemany
     ) -> None:
         if statement.lstrip().upper().startswith("SELECT "):
-            parameters_by_statement.setdefault(statement, []).append(parameters)
+            statements.append((statement, parameters))
 
     event.listen(connection.sync_connection, "before_cursor_execute", capture)
     try:
-        async with AsyncSession(bind=connection) as session:
-            await operation(CommerceService(REPOSITORIES[implementation](session)))
+        yield statements
     finally:
         event.remove(connection.sync_connection, "before_cursor_execute", capture)
+
+
+async def explain_select(
+    connection: AsyncConnection, sql: str, parameters
+) -> list[dict]:
+    plan = (
+        await connection.exec_driver_sql(
+            f"EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) {sql}", parameters
+        )
+    ).scalar_one()
+    return json.loads(plan) if isinstance(plan, str) else plan
+
+
+async def explain_operation(
+    connection: AsyncConnection, operation: Operation, implementation: str
+) -> dict:
+    parameters_by_statement: dict[str, list[Any]] = {}
+    with capture_selects(connection) as captured:
+        async with AsyncSession(bind=connection) as session:
+            await operation(CommerceService(REPOSITORIES[implementation](session)))
+    for statement, parameters in captured:
+        parameters_by_statement.setdefault(statement, []).append(parameters)
 
     statements = []
     for sql, executions in parameters_by_statement.items():
         # The SQL and bound parameters come from the repository's own read-only SELECTs.
-        plan = (
-            await connection.exec_driver_sql(
-                f"EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) {sql}", executions[0]
-            )
-        ).scalar_one()
         statements.append(
             {
                 "sql": sql,
                 "parameters": executions[0],
                 "executions": len(executions),
-                "explain": json.loads(plan) if isinstance(plan, str) else plan,
+                "explain": await explain_select(connection, sql, executions[0]),
             }
         )
     return {
