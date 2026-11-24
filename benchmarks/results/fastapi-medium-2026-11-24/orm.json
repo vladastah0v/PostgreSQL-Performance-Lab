@@ -1,0 +1,271 @@
+{
+  "metadata": {
+    "started_at_utc": "2026-11-24T15:13:21.890174+00:00",
+    "git_commit": "a064b55804bc2afbfe9d230774652cf57c3a1cd4",
+    "git_worktree_dirty": true,
+    "python": "3.12.16",
+    "docker": {
+      "server_version": "29.9.3",
+      "cpus": 2,
+      "memory_bytes": 6189211648
+    },
+    "dataset": {
+      "manifest": {
+        "counts": {
+          "users": 10000,
+          "orders": 100000,
+          "payments": 100000,
+          "products": 1000,
+          "categories": 20,
+          "order_items": 283240,
+          "user_events": 500000,
+          "order_status_history": 200000
+        },
+        "version": 1,
+        "parameters": {
+          "seed": 42,
+          "users": 10000,
+          "events": 500000,
+          "orders": 100000
+        }
+      },
+      "name": "performance_lab",
+      "revision": "0002",
+      "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)"
+    },
+    "repetitions": 20,
+    "concurrency": 1,
+    "api_settings": {
+      "workers": 1,
+      "pool_size": 5,
+      "max_overflow": 5,
+      "pool_timeout": 5.0,
+      "cache_enabled": false
+    }
+  },
+  "results": {
+    "sql": "SELECT users.id, users.email, users.full_name, users.city, users.country, users.status, users.created_at, users.updated_at \nFROM users ORDER BY users.id\n LIMIT :param_1",
+    "rows": 1000,
+    "response_sha256": "0c383eedeb92241ad00965e9fec789125b4beeaa83a4c535f50f0f81c5f28244",
+    "measurements": {
+      "orm": {
+        "runs": [
+          {
+            "total_ms": 30.929,
+            "sql_ms": 11.226,
+            "application_ms": 19.703
+          },
+          {
+            "total_ms": 31.058,
+            "sql_ms": 11.304,
+            "application_ms": 19.754
+          },
+          {
+            "total_ms": 29.037,
+            "sql_ms": 10.597,
+            "application_ms": 18.44
+          },
+          {
+            "total_ms": 31.585,
+            "sql_ms": 11.3,
+            "application_ms": 20.285
+          },
+          {
+            "total_ms": 79.628,
+            "sql_ms": 10.697,
+            "application_ms": 68.931
+          },
+          {
+            "total_ms": 45.018,
+            "sql_ms": 15.239,
+            "application_ms": 29.779
+          },
+          {
+            "total_ms": 32.101,
+            "sql_ms": 13.015,
+            "application_ms": 19.086
+          },
+          {
+            "total_ms": 36.188,
+            "sql_ms": 12.58,
+            "application_ms": 23.608
+          },
+          {
+            "total_ms": 32.068,
+            "sql_ms": 11.234,
+            "application_ms": 20.835
+          },
+          {
+            "total_ms": 30.937,
+            "sql_ms": 10.135,
+            "application_ms": 20.802
+          },
+          {
+            "total_ms": 27.38,
+            "sql_ms": 10.406,
+            "application_ms": 16.974
+          },
+          {
+            "total_ms": 31.386,
+            "sql_ms": 10.037,
+            "application_ms": 21.349
+          },
+          {
+            "total_ms": 37.343,
+            "sql_ms": 10.103,
+            "application_ms": 27.24
+          },
+          {
+            "total_ms": 56.967,
+            "sql_ms": 19.618,
+            "application_ms": 37.349
+          },
+          {
+            "total_ms": 30.699,
+            "sql_ms": 11.483,
+            "application_ms": 19.216
+          },
+          {
+            "total_ms": 32.111,
+            "sql_ms": 10.319,
+            "application_ms": 21.792
+          },
+          {
+            "total_ms": 28.063,
+            "sql_ms": 10.338,
+            "application_ms": 17.725
+          },
+          {
+            "total_ms": 28.215,
+            "sql_ms": 10.044,
+            "application_ms": 18.17
+          },
+          {
+            "total_ms": 27.996,
+            "sql_ms": 10.432,
+            "application_ms": 17.564
+          },
+          {
+            "total_ms": 29.695,
+            "sql_ms": 10.654,
+            "application_ms": 19.041
+          }
+        ],
+        "median_ms": {
+          "total_ms": 31.222,
+          "sql_ms": 10.675,
+          "application_ms": 20.02
+        }
+      },
+      "core": {
+        "runs": [
+          {
+            "total_ms": 27.163,
+            "sql_ms": 11.813,
+            "application_ms": 15.349
+          },
+          {
+            "total_ms": 27.041,
+            "sql_ms": 11.227,
+            "application_ms": 15.814
+          },
+          {
+            "total_ms": 25.189,
+            "sql_ms": 10.158,
+            "application_ms": 15.031
+          },
+          {
+            "total_ms": 29.392,
+            "sql_ms": 12.329,
+            "application_ms": 17.062
+          },
+          {
+            "total_ms": 28.423,
+            "sql_ms": 11.156,
+            "application_ms": 17.267
+          },
+          {
+            "total_ms": 42.004,
+            "sql_ms": 12.617,
+            "application_ms": 29.387
+          },
+          {
+            "total_ms": 29.283,
+            "sql_ms": 12.241,
+            "application_ms": 17.042
+          },
+          {
+            "total_ms": 25.807,
+            "sql_ms": 10.506,
+            "application_ms": 15.3
+          },
+          {
+            "total_ms": 27.964,
+            "sql_ms": 11.813,
+            "application_ms": 16.151
+          },
+          {
+            "total_ms": 27.696,
+            "sql_ms": 11.105,
+            "application_ms": 16.591
+          },
+          {
+            "total_ms": 75.383,
+            "sql_ms": 10.686,
+            "application_ms": 64.697
+          },
+          {
+            "total_ms": 29.466,
+            "sql_ms": 12.265,
+            "application_ms": 17.201
+          },
+          {
+            "total_ms": 27.713,
+            "sql_ms": 11.621,
+            "application_ms": 16.092
+          },
+          {
+            "total_ms": 27.084,
+            "sql_ms": 11.002,
+            "application_ms": 16.082
+          },
+          {
+            "total_ms": 30.124,
+            "sql_ms": 11.346,
+            "application_ms": 18.778
+          },
+          {
+            "total_ms": 77.183,
+            "sql_ms": 10.508,
+            "application_ms": 66.675
+          },
+          {
+            "total_ms": 27.503,
+            "sql_ms": 11.473,
+            "application_ms": 16.03
+          },
+          {
+            "total_ms": 26.387,
+            "sql_ms": 10.455,
+            "application_ms": 15.932
+          },
+          {
+            "total_ms": 28.103,
+            "sql_ms": 10.925,
+            "application_ms": 17.178
+          },
+          {
+            "total_ms": 27.19,
+            "sql_ms": 11.147,
+            "application_ms": 16.043
+          }
+        ],
+        "median_ms": {
+          "total_ms": 27.838,
+          "sql_ms": 11.192,
+          "application_ms": 16.371
+        }
+      }
+    }
+  }
+}

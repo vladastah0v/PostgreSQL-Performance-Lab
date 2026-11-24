@@ -2,7 +2,7 @@ import asyncio
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from hashlib import sha256
-from time import monotonic
+from time import monotonic, perf_counter_ns
 from typing import Literal
 from uuid import uuid4
 
@@ -12,6 +12,7 @@ from redis.asyncio import Redis
 from redis.exceptions import RedisError
 
 from app.core.config import Settings
+from app.core.profiling import current_profile
 from app.core.redis import analytics_cache_prefix
 
 type Operation = Literal["sales", "top-products", "customers"]
@@ -99,6 +100,34 @@ class AnalyticsCache:
         if not self.enabled:
             self.requests.labels(operation, "bypass").inc()
             return await load(), "BYPASS"
+
+        profile = current_profile.get()
+        if profile is None:
+            return await self._get_or_load(operation, query, adapter, load)
+
+        started = perf_counter_ns()
+        source_ns = 0
+
+        async def timed_load() -> T:
+            nonlocal source_ns
+            load_started = perf_counter_ns()
+            try:
+                return await load()
+            finally:
+                source_ns += perf_counter_ns() - load_started
+
+        try:
+            return await self._get_or_load(operation, query, adapter, timed_load)
+        finally:
+            profile.cache_ns += perf_counter_ns() - started - source_ns
+
+    async def _get_or_load[T](
+        self,
+        operation: Operation,
+        query: BaseModel,
+        adapter: TypeAdapter[T],
+        load: Callable[[], Awaitable[T]],
+    ) -> tuple[T, str]:
 
         digest = sha256(query.model_dump_json().encode()).hexdigest()
         token = uuid4().hex

@@ -24,6 +24,7 @@ from app.core.exceptions import (
     resource_not_found,
 )
 from app.core.lab_access import docker_gateway
+from app.core.profiling import ProfileMiddleware, create_profile_tracer, is_api_request
 from app.core.redis import create_redis, get_redis
 from app.schemas.cursors import InvalidCursor
 from app.services.analytics_cache import AnalyticsCache, cache_counter
@@ -35,10 +36,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings if settings is not None else Settings()
     registry = CollectorRegistry()
     analytics_requests = cache_counter(registry)
+    tracer = create_profile_tracer() if settings.api_profiling_enabled else None
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         async with AsyncExitStack() as resources:
+            if tracer is not None:
+                resources.callback(tracer.shutdown)
             engine = create_engine(settings)
             resources.push_async_callback(engine.dispose)
             app.state.db_session_factory = async_sessionmaker(
@@ -53,7 +57,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
             yield
 
-    app = FastAPI(title="PostgreSQL Performance Lab", lifespan=lifespan)
+    telemetry = (
+        None
+        if tracer is None
+        else {
+            "tracer_provider": tracer,
+            "metrics": False,
+            "logs": False,
+            "auto_configure": False,
+            "exclude": lambda scope: not is_api_request(scope),
+        }
+    )
+    app = FastAPI(
+        title="PostgreSQL Performance Lab", lifespan=lifespan, telemetry=telemetry
+    )
+    if tracer is not None:
+        app.add_middleware(ProfileMiddleware)
     app.add_exception_handler(ResourceNotFound, resource_not_found)
     app.add_exception_handler(InvalidCursor, invalid_cursor)
     app.add_exception_handler(SQLAlchemyError, database_error)

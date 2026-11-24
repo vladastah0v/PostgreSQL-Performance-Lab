@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     db_max_overflow: int = Field(default=5, ge=0)
     db_pool_timeout: float = Field(default=5, gt=0)
     db_statement_timeout_ms: int = Field(default=30_000, ge=1)
+    api_profiling_enabled: bool = False
+    web_concurrency: int = Field(default=1, ge=1)
     healthcheck_timeout: float = Field(default=2, gt=0)
     lab_mode: bool = False
     lab_allow_docker_gateway: bool = False

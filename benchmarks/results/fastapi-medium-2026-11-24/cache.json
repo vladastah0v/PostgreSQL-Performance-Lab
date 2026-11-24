@@ -1,0 +1,495 @@
+{
+  "metadata": {
+    "started_at_utc": "2026-11-24T15:15:23.824687+00:00",
+    "git_commit": "a064b55804bc2afbfe9d230774652cf57c3a1cd4",
+    "git_worktree_dirty": true,
+    "python": "3.12.16",
+    "docker": {
+      "server_version": "29.9.3",
+      "cpus": 2,
+      "memory_bytes": 6189211648
+    },
+    "dataset": {
+      "manifest": {
+        "counts": {
+          "users": 10000,
+          "orders": 100000,
+          "payments": 100000,
+          "products": 1000,
+          "categories": 20,
+          "order_items": 283240,
+          "user_events": 500000,
+          "order_status_history": 200000
+        },
+        "version": 1,
+        "parameters": {
+          "seed": 42,
+          "users": 10000,
+          "events": 500000,
+          "orders": 100000
+        }
+      },
+      "name": "performance_lab",
+      "revision": "0002",
+      "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)"
+    },
+    "repetitions": 20,
+    "concurrency": 4,
+    "api_settings": {
+      "workers": 1,
+      "pool_size": 5,
+      "max_overflow": 5,
+      "pool_timeout": 5.0,
+      "cache_enabled": true
+    }
+  },
+  "results": {
+    "workload": {
+      "path": "/api/v1/optimized/analytics/top-products",
+      "params": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31",
+        "limit": 20
+      },
+      "cache_status": "HIT",
+      "ignore_offset": false
+    },
+    "prime": {
+      "status": 200,
+      "http_ms": 235.07,
+      "transport_and_client_ms": 34.589,
+      "response_bytes": 1674,
+      "worker_pid": 1,
+      "sql_queries": 1,
+      "cache_status": "MISS",
+      "timing_ms": {
+        "server": 200.481,
+        "sql": 154.763,
+        "pool": 1.865,
+        "serialization": 0.098,
+        "cache": 2.757,
+        "logic": 37.87,
+        "framework": 3.128
+      },
+      "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+    },
+    "warm": {
+      "success_count": 20,
+      "status_counts": {
+        "200": 20
+      },
+      "http_success": {
+        "p50_ms": 27.812,
+        "p95_ms": 89.057,
+        "p99_ms": 92.911,
+        "min_ms": 16.458,
+        "max_ms": 92.911
+      },
+      "http_all": {
+        "p50_ms": 27.812,
+        "p95_ms": 89.057,
+        "p99_ms": 92.911,
+        "min_ms": 16.458,
+        "max_ms": 92.911
+      },
+      "phases_p50_ms": {
+        "server": 11.178,
+        "sql": 0.0,
+        "pool": 0.0,
+        "serialization": 0.088,
+        "cache": 9.256,
+        "logic": 0.052,
+        "framework": 1.635
+      },
+      "transport_and_client_p50_ms": 16.072,
+      "sql_queries_p50": 0.0,
+      "response_bytes_p50": 1674.0,
+      "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41",
+      "workers_observed": [
+        1
+      ],
+      "runs": [
+        {
+          "status": 200,
+          "http_ms": 68.517,
+          "transport_and_client_ms": 63.675,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 4.842,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.082,
+            "cache": 3.035,
+            "logic": 0.072,
+            "framework": 1.653
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 83.907,
+          "transport_and_client_ms": 74.461,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 9.446,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.081,
+            "cache": 7.483,
+            "logic": 0.049,
+            "framework": 1.833
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 92.911,
+          "transport_and_client_ms": 78.504,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 14.407,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.096,
+            "cache": 13.308,
+            "logic": 0.092,
+            "framework": 0.911
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 89.057,
+          "transport_and_client_ms": 75.984,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 13.073,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.085,
+            "cache": 11.902,
+            "logic": 0.045,
+            "framework": 1.041
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 16.458,
+          "transport_and_client_ms": 9.527,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 6.931,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.118,
+            "cache": 5.145,
+            "logic": 0.05,
+            "framework": 1.618
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 25.222,
+          "transport_and_client_ms": 13.406,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 11.816,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.079,
+            "cache": 9.826,
+            "logic": 0.046,
+            "framework": 1.866
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 26.349,
+          "transport_and_client_ms": 17.113,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 9.236,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.089,
+            "cache": 7.198,
+            "logic": 0.045,
+            "framework": 1.905
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 27.866,
+          "transport_and_client_ms": 18.649,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 9.217,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.095,
+            "cache": 7.758,
+            "logic": 0.049,
+            "framework": 1.315
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 27.757,
+          "transport_and_client_ms": 11.707,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 16.05,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.09,
+            "cache": 12.446,
+            "logic": 0.076,
+            "framework": 3.438
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 30.834,
+          "transport_and_client_ms": 15.031,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 15.803,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.083,
+            "cache": 13.769,
+            "logic": 0.059,
+            "framework": 1.893
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 33.427,
+          "transport_and_client_ms": 18.39,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 15.037,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.086,
+            "cache": 12.985,
+            "logic": 0.063,
+            "framework": 1.903
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 38.201,
+          "transport_and_client_ms": 20.677,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 17.524,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.147,
+            "cache": 15.754,
+            "logic": 0.045,
+            "framework": 1.577
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 20.414,
+          "transport_and_client_ms": 9.416,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 10.998,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.114,
+            "cache": 9.085,
+            "logic": 0.092,
+            "framework": 1.708
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 25.451,
+          "transport_and_client_ms": 11.371,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 14.08,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.08,
+            "cache": 11.706,
+            "logic": 0.059,
+            "framework": 2.234
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 28.883,
+          "transport_and_client_ms": 14.568,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 14.315,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.186,
+            "cache": 12.415,
+            "logic": 0.109,
+            "framework": 1.605
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 30.889,
+          "transport_and_client_ms": 19.53,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 11.359,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.309,
+            "cache": 9.427,
+            "logic": 0.053,
+            "framework": 1.57
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 19.507,
+          "transport_and_client_ms": 11.079,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 8.428,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.076,
+            "cache": 6.966,
+            "logic": 0.044,
+            "framework": 1.342
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 22.604,
+          "transport_and_client_ms": 11.755,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 10.849,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.073,
+            "cache": 9.02,
+            "logic": 0.047,
+            "framework": 1.708
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 24.667,
+          "transport_and_client_ms": 14.012,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 10.655,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.105,
+            "cache": 9.034,
+            "logic": 0.048,
+            "framework": 1.469
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        },
+        {
+          "status": 200,
+          "http_ms": 26.183,
+          "transport_and_client_ms": 17.611,
+          "response_bytes": 1674,
+          "worker_pid": 1,
+          "sql_queries": 0,
+          "cache_status": "HIT",
+          "timing_ms": {
+            "server": 8.572,
+            "sql": 0.0,
+            "pool": 0.0,
+            "serialization": 0.087,
+            "cache": 6.789,
+            "logic": 0.112,
+            "framework": 1.583
+          },
+          "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41"
+        }
+      ]
+    }
+  }
+}

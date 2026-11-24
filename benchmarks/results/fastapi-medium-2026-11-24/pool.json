@@ -1,0 +1,2227 @@
+{
+  "metadata": {
+    "started_at_utc": "2026-11-24T15:13:28.975737+00:00",
+    "git_commit": "a064b55804bc2afbfe9d230774652cf57c3a1cd4",
+    "git_worktree_dirty": true,
+    "python": "3.12.16",
+    "docker": {
+      "server_version": "29.9.3",
+      "cpus": 2,
+      "memory_bytes": 6189211648
+    },
+    "dataset": {
+      "manifest": {
+        "counts": {
+          "users": 10000,
+          "orders": 100000,
+          "payments": 100000,
+          "products": 1000,
+          "categories": 20,
+          "order_items": 283240,
+          "user_events": 500000,
+          "order_status_history": 200000
+        },
+        "version": 1,
+        "parameters": {
+          "seed": 42,
+          "users": 10000,
+          "events": 500000,
+          "orders": 100000
+        }
+      },
+      "name": "performance_lab",
+      "revision": "0002",
+      "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)"
+    },
+    "repetitions": 20,
+    "concurrency": 4,
+    "api_settings": {
+      "workers": 1,
+      "pool_size": 5,
+      "max_overflow": 5,
+      "pool_timeout": 5.0,
+      "cache_enabled": false
+    }
+  },
+  "results": {
+    "workload": {
+      "path": "/api/v1/optimized/analytics/sales",
+      "params": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31",
+        "period": "day"
+      },
+      "cache_status": "BYPASS",
+      "ignore_offset": false
+    },
+    "configurations": {
+      "control": {
+        "config": {
+          "size": 1,
+          "overflow": 0,
+          "timeout": 2,
+          "workers": 1
+        },
+        "max_slots": 1,
+        "budget": {
+          "max_connections": 100,
+          "superuser_reserved": 3,
+          "reserved": 0,
+          "other_connections": 5,
+          "required_with_existing": 6,
+          "usable": 97
+        },
+        "success_count": 20,
+        "status_counts": {
+          "200": 20
+        },
+        "http_success": {
+          "p50_ms": 441.963,
+          "p95_ms": 889.38,
+          "p99_ms": 1251.035,
+          "min_ms": 140.86,
+          "max_ms": 1251.035
+        },
+        "http_all": {
+          "p50_ms": 441.963,
+          "p95_ms": 889.38,
+          "p99_ms": 1251.035,
+          "min_ms": 140.86,
+          "max_ms": 1251.035
+        },
+        "phases_p50_ms": {
+          "server": 411.675,
+          "sql": 134.448,
+          "pool": 247.638,
+          "serialization": 0.787,
+          "cache": 0.0,
+          "logic": 10.378,
+          "framework": 1.877
+        },
+        "transport_and_client_p50_ms": 27.433,
+        "sql_queries_p50": 1.0,
+        "response_bytes_p50": 21377.0,
+        "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f",
+        "workers_observed": [
+          1
+        ],
+        "runs": [
+          {
+            "status": 200,
+            "http_ms": 329.002,
+            "transport_and_client_ms": 22.097,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 306.905,
+              "sql": 149.876,
+              "pool": 144.827,
+              "serialization": 0.943,
+              "cache": 0.0,
+              "logic": 9.445,
+              "framework": 1.813
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 162.899,
+            "transport_and_client_ms": 19.247,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 143.652,
+              "sql": 121.727,
+              "pool": 9.119,
+              "serialization": 0.812,
+              "cache": 0.0,
+              "logic": 10.462,
+              "framework": 1.533
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 889.38,
+            "transport_and_client_ms": 31.705,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 857.675,
+              "sql": 511.34,
+              "pool": 311.671,
+              "serialization": 19.555,
+              "cache": 0.0,
+              "logic": 13.698,
+              "framework": 1.412
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 1251.035,
+            "transport_and_client_ms": 24.376,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 1226.659,
+              "sql": 338.627,
+              "pool": 874.265,
+              "serialization": 1.11,
+              "cache": 0.0,
+              "logic": 11.128,
+              "framework": 1.529
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 306.672,
+            "transport_and_client_ms": 22.651,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 284.021,
+              "sql": 253.052,
+              "pool": 14.792,
+              "serialization": 1.021,
+              "cache": 0.0,
+              "logic": 12.517,
+              "framework": 2.639
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 600.269,
+            "transport_and_client_ms": 28.286,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 571.983,
+              "sql": 119.397,
+              "pool": 442.674,
+              "serialization": 0.76,
+              "cache": 0.0,
+              "logic": 7.106,
+              "framework": 2.045
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 700.309,
+            "transport_and_client_ms": 30.759,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 669.55,
+              "sql": 86.013,
+              "pool": 573.469,
+              "serialization": 0.535,
+              "cache": 0.0,
+              "logic": 7.58,
+              "framework": 1.954
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 461.425,
+            "transport_and_client_ms": 20.876,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 440.549,
+              "sql": 143.822,
+              "pool": 283.595,
+              "serialization": 0.917,
+              "cache": 0.0,
+              "logic": 10.194,
+              "framework": 2.021
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 233.752,
+            "transport_and_client_ms": 26.579,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 207.173,
+              "sql": 74.979,
+              "pool": 123.246,
+              "serialization": 0.365,
+              "cache": 0.0,
+              "logic": 6.845,
+              "framework": 1.739
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 356.594,
+            "transport_and_client_ms": 29.344,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 327.25,
+              "sql": 107.816,
+              "pool": 211.68,
+              "serialization": 0.419,
+              "cache": 0.0,
+              "logic": 5.673,
+              "framework": 1.663
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 443.669,
+            "transport_and_client_ms": 30.68,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 412.989,
+              "sql": 76.002,
+              "pool": 329.041,
+              "serialization": 0.397,
+              "cache": 0.0,
+              "logic": 6.421,
+              "framework": 1.128
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 140.86,
+            "transport_and_client_ms": 15.713,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 125.147,
+              "sql": 103.214,
+              "pool": 11.257,
+              "serialization": 0.431,
+              "cache": 0.0,
+              "logic": 8.095,
+              "framework": 2.149
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 440.257,
+            "transport_and_client_ms": 29.895,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 410.362,
+              "sql": 221.66,
+              "pool": 164.433,
+              "serialization": 0.874,
+              "cache": 0.0,
+              "logic": 21.386,
+              "framework": 2.008
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 676.268,
+            "transport_and_client_ms": 33.098,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 643.17,
+              "sql": 196.951,
+              "pool": 429.567,
+              "serialization": 0.667,
+              "cache": 0.0,
+              "logic": 14.233,
+              "framework": 1.751
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 196.055,
+            "transport_and_client_ms": 29.457,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 166.598,
+              "sql": 136.435,
+              "pool": 13.284,
+              "serialization": 1.128,
+              "cache": 0.0,
+              "logic": 13.368,
+              "framework": 2.384
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 858.209,
+            "transport_and_client_ms": 33.873,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 824.336,
+              "sql": 143.282,
+              "pool": 659.193,
+              "serialization": 0.891,
+              "cache": 0.0,
+              "logic": 19.179,
+              "framework": 1.791
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 180.946,
+            "transport_and_client_ms": 20.72,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 160.226,
+              "sql": 132.461,
+              "pool": 13.3,
+              "serialization": 0.435,
+              "cache": 0.0,
+              "logic": 12.122,
+              "framework": 1.908
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 342.972,
+            "transport_and_client_ms": 24.814,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 318.158,
+              "sql": 138.183,
+              "pool": 164.851,
+              "serialization": 0.78,
+              "cache": 0.0,
+              "logic": 11.878,
+              "framework": 2.467
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 576.955,
+            "transport_and_client_ms": 30.63,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 546.325,
+              "sql": 95.232,
+              "pool": 441.034,
+              "serialization": 0.794,
+              "cache": 0.0,
+              "logic": 7.31,
+              "framework": 1.955
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 463.204,
+            "transport_and_client_ms": 25.755,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 437.449,
+              "sql": 101.638,
+              "pool": 323.148,
+              "serialization": 0.524,
+              "cache": 0.0,
+              "logic": 10.294,
+              "framework": 1.845
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          }
+        ]
+      },
+      "larger-pool": {
+        "config": {
+          "size": 2,
+          "overflow": 0,
+          "timeout": 2,
+          "workers": 1
+        },
+        "max_slots": 2,
+        "budget": {
+          "max_connections": 100,
+          "superuser_reserved": 3,
+          "reserved": 0,
+          "other_connections": 1,
+          "required_with_existing": 3,
+          "usable": 97
+        },
+        "success_count": 20,
+        "status_counts": {
+          "200": 20
+        },
+        "http_success": {
+          "p50_ms": 163.39,
+          "p95_ms": 303.944,
+          "p99_ms": 317.058,
+          "min_ms": 105.584,
+          "max_ms": 317.058
+        },
+        "http_all": {
+          "p50_ms": 163.39,
+          "p95_ms": 303.944,
+          "p99_ms": 317.058,
+          "min_ms": 105.584,
+          "max_ms": 317.058
+        },
+        "phases_p50_ms": {
+          "server": 143.27,
+          "sql": 82.915,
+          "pool": 55.489,
+          "serialization": 0.467,
+          "cache": 0.0,
+          "logic": 7.091,
+          "framework": 1.16
+        },
+        "transport_and_client_p50_ms": 20.243,
+        "sql_queries_p50": 1.0,
+        "response_bytes_p50": 21377.0,
+        "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f",
+        "workers_observed": [
+          1
+        ],
+        "runs": [
+          {
+            "status": 200,
+            "http_ms": 110.193,
+            "transport_and_client_ms": 19.885,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 90.308,
+              "sql": 76.972,
+              "pool": 5.762,
+              "serialization": 0.461,
+              "cache": 0.0,
+              "logic": 8.316,
+              "framework": 0.0
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 204.64,
+            "transport_and_client_ms": 21.182,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 183.458,
+              "sql": 76.076,
+              "pool": 99.926,
+              "serialization": 0.396,
+              "cache": 0.0,
+              "logic": 7.52,
+              "framework": 0.0
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 116.69,
+            "transport_and_client_ms": 15.267,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 101.423,
+              "sql": 84.788,
+              "pool": 9.34,
+              "serialization": 0.467,
+              "cache": 0.0,
+              "logic": 7.846,
+              "framework": 0.0
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 213.033,
+            "transport_and_client_ms": 22.434,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 190.599,
+              "sql": 80.458,
+              "pool": 101.066,
+              "serialization": 0.556,
+              "cache": 0.0,
+              "logic": 9.657,
+              "framework": 0.0
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 108.185,
+            "transport_and_client_ms": 16.216,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 91.969,
+              "sql": 75.774,
+              "pool": 7.938,
+              "serialization": 0.441,
+              "cache": 0.0,
+              "logic": 6.413,
+              "framework": 1.402
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 114.909,
+            "transport_and_client_ms": 17.897,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 97.012,
+              "sql": 83.283,
+              "pool": 6.247,
+              "serialization": 0.44,
+              "cache": 0.0,
+              "logic": 5.949,
+              "framework": 1.094
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 209.446,
+            "transport_and_client_ms": 21.311,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 188.135,
+              "sql": 83.057,
+              "pool": 98.792,
+              "serialization": 0.363,
+              "cache": 0.0,
+              "logic": 4.953,
+              "framework": 0.971
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 216.759,
+            "transport_and_client_ms": 18.943,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 197.816,
+              "sql": 90.549,
+              "pool": 99.046,
+              "serialization": 0.397,
+              "cache": 0.0,
+              "logic": 6.63,
+              "framework": 1.193
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 115.934,
+            "transport_and_client_ms": 19.66,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 96.274,
+              "sql": 82.772,
+              "pool": 5.963,
+              "serialization": 0.391,
+              "cache": 0.0,
+              "logic": 6.052,
+              "framework": 1.096
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 105.584,
+            "transport_and_client_ms": 16.557,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 89.027,
+              "sql": 74.606,
+              "pool": 7.374,
+              "serialization": 0.39,
+              "cache": 0.0,
+              "logic": 5.443,
+              "framework": 1.215
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 249.881,
+            "transport_and_client_ms": 21.977,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 227.904,
+              "sql": 114.143,
+              "pool": 100.366,
+              "serialization": 1.045,
+              "cache": 0.0,
+              "logic": 10.788,
+              "framework": 1.562
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 268.221,
+            "transport_and_client_ms": 19.263,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 248.958,
+              "sql": 137.372,
+              "pool": 100.578,
+              "serialization": 0.551,
+              "cache": 0.0,
+              "logic": 9.387,
+              "framework": 1.07
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 117.011,
+            "transport_and_client_ms": 21.497,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 95.514,
+              "sql": 74.885,
+              "pool": 12.187,
+              "serialization": 0.496,
+              "cache": 0.0,
+              "logic": 6.193,
+              "framework": 1.754
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 317.058,
+            "transport_and_client_ms": 27.077,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 289.981,
+              "sql": 173.858,
+              "pool": 106.981,
+              "serialization": 0.523,
+              "cache": 0.0,
+              "logic": 7.008,
+              "framework": 1.61
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 303.944,
+            "transport_and_client_ms": 26.2,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 277.744,
+              "sql": 165.074,
+              "pool": 103.127,
+              "serialization": 0.804,
+              "cache": 0.0,
+              "logic": 7.175,
+              "framework": 1.564
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 122.14,
+            "transport_and_client_ms": 19.058,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 103.082,
+              "sql": 80.777,
+              "pool": 9.869,
+              "serialization": 0.723,
+              "cache": 0.0,
+              "logic": 9.874,
+              "framework": 1.838
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 110.952,
+            "transport_and_client_ms": 20.601,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 90.351,
+              "sql": 74.391,
+              "pool": 6.596,
+              "serialization": 0.467,
+              "cache": 0.0,
+              "logic": 7.562,
+              "framework": 1.335
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 119.013,
+            "transport_and_client_ms": 16.288,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 102.725,
+              "sql": 85.404,
+              "pool": 9.195,
+              "serialization": 0.575,
+              "cache": 0.0,
+              "logic": 6.292,
+              "framework": 1.258
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 233.021,
+            "transport_and_client_ms": 21.295,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 211.726,
+              "sql": 89.915,
+              "pool": 113.977,
+              "serialization": 0.51,
+              "cache": 0.0,
+              "logic": 6.195,
+              "framework": 1.128
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 222.517,
+            "transport_and_client_ms": 21.865,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 200.652,
+              "sql": 82.437,
+              "pool": 107.746,
+              "serialization": 0.401,
+              "cache": 0.0,
+              "logic": 9.096,
+              "framework": 0.973
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          }
+        ]
+      },
+      "overflow": {
+        "config": {
+          "size": 1,
+          "overflow": 1,
+          "timeout": 2,
+          "workers": 1
+        },
+        "max_slots": 2,
+        "budget": {
+          "max_connections": 100,
+          "superuser_reserved": 3,
+          "reserved": 0,
+          "other_connections": 2,
+          "required_with_existing": 4,
+          "usable": 97
+        },
+        "success_count": 20,
+        "status_counts": {
+          "200": 20
+        },
+        "http_success": {
+          "p50_ms": 183.587,
+          "p95_ms": 257.037,
+          "p99_ms": 278.657,
+          "min_ms": 103.254,
+          "max_ms": 278.657
+        },
+        "http_all": {
+          "p50_ms": 183.587,
+          "p95_ms": 257.037,
+          "p99_ms": 278.657,
+          "min_ms": 103.254,
+          "max_ms": 278.657
+        },
+        "phases_p50_ms": {
+          "server": 163.131,
+          "sql": 82.298,
+          "pool": 53.886,
+          "serialization": 0.439,
+          "cache": 0.0,
+          "logic": 6.199,
+          "framework": 1.179
+        },
+        "transport_and_client_p50_ms": 20.785,
+        "sql_queries_p50": 1.0,
+        "response_bytes_p50": 21377.0,
+        "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f",
+        "workers_observed": [
+          1
+        ],
+        "runs": [
+          {
+            "status": 200,
+            "http_ms": 124.818,
+            "transport_and_client_ms": 20.447,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 104.371,
+              "sql": 79.664,
+              "pool": 17.281,
+              "serialization": 0.39,
+              "cache": 0.0,
+              "logic": 5.957,
+              "framework": 1.079
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 103.254,
+            "transport_and_client_ms": 15.98,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 87.274,
+              "sql": 70.004,
+              "pool": 10.118,
+              "serialization": 0.403,
+              "cache": 0.0,
+              "logic": 5.607,
+              "framework": 1.142
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 219.707,
+            "transport_and_client_ms": 23.282,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 196.425,
+              "sql": 85.275,
+              "pool": 101.686,
+              "serialization": 0.38,
+              "cache": 0.0,
+              "logic": 7.731,
+              "framework": 1.354
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 204.888,
+            "transport_and_client_ms": 19.788,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 185.1,
+              "sql": 91.556,
+              "pool": 85.621,
+              "serialization": 0.47,
+              "cache": 0.0,
+              "logic": 6.236,
+              "framework": 1.216
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 162.285,
+            "transport_and_client_ms": 21.123,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 141.162,
+              "sql": 111.889,
+              "pool": 17.832,
+              "serialization": 0.71,
+              "cache": 0.0,
+              "logic": 9.058,
+              "framework": 1.673
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 131.931,
+            "transport_and_client_ms": 17.132,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 114.799,
+              "sql": 94.247,
+              "pool": 11.257,
+              "serialization": 0.505,
+              "cache": 0.0,
+              "logic": 7.078,
+              "framework": 1.712
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 278.657,
+            "transport_and_client_ms": 24.738,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 253.919,
+              "sql": 109.307,
+              "pool": 137.864,
+              "serialization": 0.389,
+              "cache": 0.0,
+              "logic": 5.275,
+              "framework": 1.084
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 257.037,
+            "transport_and_client_ms": 21.773,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 235.264,
+              "sql": 114.297,
+              "pool": 111.316,
+              "serialization": 0.459,
+              "cache": 0.0,
+              "logic": 8.034,
+              "framework": 1.157
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 226.418,
+            "transport_and_client_ms": 24.527,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 201.891,
+              "sql": 90.43,
+              "pool": 103.881,
+              "serialization": 0.441,
+              "cache": 0.0,
+              "logic": 6.119,
+              "framework": 1.02
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 125.044,
+            "transport_and_client_ms": 18.368,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 106.676,
+              "sql": 80.788,
+              "pool": 17.117,
+              "serialization": 0.4,
+              "cache": 0.0,
+              "logic": 7.192,
+              "framework": 1.179
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 215.124,
+            "transport_and_client_ms": 23.412,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 191.712,
+              "sql": 78.119,
+              "pool": 106.442,
+              "serialization": 0.414,
+              "cache": 0.0,
+              "logic": 5.567,
+              "framework": 1.17
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 106.786,
+            "transport_and_client_ms": 14.252,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 92.534,
+              "sql": 74.226,
+              "pool": 10.229,
+              "serialization": 0.388,
+              "cache": 0.0,
+              "logic": 6.22,
+              "framework": 1.471
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 132.894,
+            "transport_and_client_ms": 19.181,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 113.713,
+              "sql": 83.809,
+              "pool": 22.151,
+              "serialization": 0.437,
+              "cache": 0.0,
+              "logic": 6.044,
+              "framework": 1.272
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 207.665,
+            "transport_and_client_ms": 22.404,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 185.261,
+              "sql": 86.416,
+              "pool": 91.876,
+              "serialization": 0.387,
+              "cache": 0.0,
+              "logic": 5.404,
+              "framework": 1.178
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 223.143,
+            "transport_and_client_ms": 23.586,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 199.557,
+              "sql": 78.776,
+              "pool": 112.959,
+              "serialization": 0.448,
+              "cache": 0.0,
+              "logic": 6.358,
+              "framework": 1.015
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 110.559,
+            "transport_and_client_ms": 15.298,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 95.261,
+              "sql": 77.723,
+              "pool": 10.531,
+              "serialization": 0.397,
+              "cache": 0.0,
+              "logic": 5.346,
+              "framework": 1.263
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 114.462,
+            "transport_and_client_ms": 16.785,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 97.677,
+              "sql": 78.788,
+              "pool": 10.823,
+              "serialization": 0.476,
+              "cache": 0.0,
+              "logic": 6.178,
+              "framework": 1.412
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 222.673,
+            "transport_and_client_ms": 24.237,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 198.436,
+              "sql": 84.007,
+              "pool": 105.11,
+              "serialization": 1.344,
+              "cache": 0.0,
+              "logic": 6.602,
+              "framework": 1.373
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 209.558,
+            "transport_and_client_ms": 23.029,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 186.529,
+              "sql": 74.88,
+              "pool": 105.274,
+              "serialization": 0.518,
+              "cache": 0.0,
+              "logic": 4.872,
+              "framework": 0.985
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 121.03,
+            "transport_and_client_ms": 17.263,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 103.767,
+              "sql": 74.815,
+              "pool": 20.452,
+              "serialization": 0.44,
+              "cache": 0.0,
+              "logic": 6.981,
+              "framework": 1.079
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          }
+        ]
+      },
+      "short-timeout": {
+        "config": {
+          "size": 1,
+          "overflow": 0,
+          "timeout": 0.04,
+          "workers": 1
+        },
+        "max_slots": 1,
+        "budget": {
+          "max_connections": 100,
+          "superuser_reserved": 3,
+          "reserved": 0,
+          "other_connections": 1,
+          "required_with_existing": 2,
+          "usable": 97
+        },
+        "success_count": 5,
+        "status_counts": {
+          "200": 5,
+          "503": 15
+        },
+        "http_success": {
+          "p50_ms": 115.709,
+          "p95_ms": 151.319,
+          "p99_ms": 151.319,
+          "min_ms": 109.37,
+          "max_ms": 151.319
+        },
+        "http_all": {
+          "p50_ms": 73.703,
+          "p95_ms": 118.816,
+          "p99_ms": 151.319,
+          "min_ms": 64.454,
+          "max_ms": 151.319
+        },
+        "phases_p50_ms": {
+          "server": 99.378,
+          "sql": 81.222,
+          "pool": 9.543,
+          "serialization": 0.447,
+          "cache": 0.0,
+          "logic": 5.554,
+          "framework": 1.621
+        },
+        "transport_and_client_p50_ms": 16.031,
+        "sql_queries_p50": 1,
+        "response_bytes_p50": 21377,
+        "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f",
+        "workers_observed": [
+          1
+        ],
+        "runs": [
+          {
+            "status": 503,
+            "http_ms": 64.454,
+            "transport_and_client_ms": 20.387,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 44.067,
+              "sql": 0.0,
+              "pool": 41.245,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 1.193,
+              "framework": 1.629
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 65.078,
+            "transport_and_client_ms": 19.916,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 45.162,
+              "sql": 0.0,
+              "pool": 42.146,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.809,
+              "framework": 2.206
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 68.337,
+            "transport_and_client_ms": 21.512,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 46.825,
+              "sql": 0.0,
+              "pool": 40.733,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.878,
+              "framework": 5.214
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 200,
+            "http_ms": 109.37,
+            "transport_and_client_ms": 13.411,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 95.959,
+              "sql": 81.679,
+              "pool": 7.497,
+              "serialization": 0.487,
+              "cache": 0.0,
+              "logic": 5.138,
+              "framework": 1.158
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 503,
+            "http_ms": 69.402,
+            "transport_and_client_ms": 24.02,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 45.382,
+              "sql": 0.0,
+              "pool": 40.821,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 2.515,
+              "framework": 2.046
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 200,
+            "http_ms": 115.709,
+            "transport_and_client_ms": 15.802,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 99.907,
+              "sql": 80.682,
+              "pool": 11.016,
+              "serialization": 0.463,
+              "cache": 0.0,
+              "logic": 5.838,
+              "framework": 1.908
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 503,
+            "http_ms": 74.093,
+            "transport_and_client_ms": 25.962,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 48.131,
+              "sql": 0.0,
+              "pool": 43.731,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 1.112,
+              "framework": 3.287
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 68.428,
+            "transport_and_client_ms": 23.528,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 44.9,
+              "sql": 0.0,
+              "pool": 41.39,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.902,
+              "framework": 2.608
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 200,
+            "http_ms": 151.319,
+            "transport_and_client_ms": 17.365,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 133.954,
+              "sql": 91.472,
+              "pool": 35.015,
+              "serialization": 0.447,
+              "cache": 0.0,
+              "logic": 5.544,
+              "framework": 1.477
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 503,
+            "http_ms": 78.493,
+            "transport_and_client_ms": 32.938,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 45.555,
+              "sql": 0.0,
+              "pool": 40.694,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 1.844,
+              "framework": 3.017
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 73.784,
+            "transport_and_client_ms": 19.318,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 54.466,
+              "sql": 0.0,
+              "pool": 42.25,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 2.562,
+              "framework": 9.654
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 90.012,
+            "transport_and_client_ms": 34.232,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 55.78,
+              "sql": 0.0,
+              "pool": 40.669,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 2.393,
+              "framework": 12.717
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 200,
+            "http_ms": 118.816,
+            "transport_and_client_ms": 19.438,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 99.378,
+              "sql": 81.222,
+              "pool": 9.543,
+              "serialization": 0.395,
+              "cache": 0.0,
+              "logic": 6.141,
+              "framework": 2.077
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 503,
+            "http_ms": 73.622,
+            "transport_and_client_ms": 26.245,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 47.377,
+              "sql": 0.0,
+              "pool": 43.359,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.949,
+              "framework": 3.069
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 76.156,
+            "transport_and_client_ms": 27.999,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 48.157,
+              "sql": 0.0,
+              "pool": 41.723,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.864,
+              "framework": 5.57
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 65.803,
+            "transport_and_client_ms": 20.455,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 45.348,
+              "sql": 0.0,
+              "pool": 41.197,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 1.562,
+              "framework": 2.588
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 65.016,
+            "transport_and_client_ms": 20.81,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 44.206,
+              "sql": 0.0,
+              "pool": 41.304,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 1.221,
+              "framework": 1.681
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 200,
+            "http_ms": 112.586,
+            "transport_and_client_ms": 16.031,
+            "response_bytes": 21377,
+            "worker_pid": 1,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 96.555,
+              "sql": 81.199,
+              "pool": 7.804,
+              "serialization": 0.376,
+              "cache": 0.0,
+              "logic": 5.554,
+              "framework": 1.621
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 503,
+            "http_ms": 70.514,
+            "transport_and_client_ms": 23.8,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 46.714,
+              "sql": 0.0,
+              "pool": 40.762,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.925,
+              "framework": 5.027
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          },
+          {
+            "status": 503,
+            "http_ms": 66.418,
+            "transport_and_client_ms": 21.043,
+            "response_bytes": 36,
+            "worker_pid": 1,
+            "sql_queries": 0,
+            "cache_status": null,
+            "timing_ms": {
+              "server": 45.375,
+              "sql": 0.0,
+              "pool": 42.079,
+              "serialization": 0.0,
+              "cache": 0.0,
+              "logic": 0.979,
+              "framework": 2.317
+            },
+            "response_sha256": "65d891b285e6a6c565de362422cbdc0df87466c75d160d61c27cef39ad98c834"
+          }
+        ]
+      },
+      "two-workers": {
+        "config": {
+          "size": 1,
+          "overflow": 0,
+          "timeout": 2,
+          "workers": 2
+        },
+        "max_slots": 2,
+        "budget": {
+          "max_connections": 100,
+          "superuser_reserved": 3,
+          "reserved": 0,
+          "other_connections": 1,
+          "required_with_existing": 3,
+          "usable": 97
+        },
+        "success_count": 20,
+        "status_counts": {
+          "200": 20
+        },
+        "http_success": {
+          "p50_ms": 248.276,
+          "p95_ms": 384.613,
+          "p99_ms": 464.742,
+          "min_ms": 98.897,
+          "max_ms": 464.742
+        },
+        "http_all": {
+          "p50_ms": 248.276,
+          "p95_ms": 384.613,
+          "p99_ms": 464.742,
+          "min_ms": 98.897,
+          "max_ms": 464.742
+        },
+        "phases_p50_ms": {
+          "server": 225.326,
+          "sql": 78.509,
+          "pool": 137.898,
+          "serialization": 0.43,
+          "cache": 0.0,
+          "logic": 6.312,
+          "framework": 1.358
+        },
+        "transport_and_client_p50_ms": 22.993,
+        "sql_queries_p50": 1.0,
+        "response_bytes_p50": 21377.0,
+        "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f",
+        "workers_observed": [
+          8,
+          9
+        ],
+        "runs": [
+          {
+            "status": 200,
+            "http_ms": 183.813,
+            "transport_and_client_ms": 20.8,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 163.013,
+              "sql": 69.714,
+              "pool": 85.318,
+              "serialization": 0.359,
+              "cache": 0.0,
+              "logic": 6.39,
+              "framework": 1.233
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 102.67,
+            "transport_and_client_ms": 15.656,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 87.014,
+              "sql": 69.87,
+              "pool": 9.578,
+              "serialization": 0.381,
+              "cache": 0.0,
+              "logic": 5.601,
+              "framework": 1.585
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 341.86,
+            "transport_and_client_ms": 24.153,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 317.707,
+              "sql": 69.71,
+              "pool": 240.871,
+              "serialization": 0.359,
+              "cache": 0.0,
+              "logic": 5.807,
+              "framework": 0.96
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 259.932,
+            "transport_and_client_ms": 21.11,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 238.822,
+              "sql": 67.844,
+              "pool": 163.86,
+              "serialization": 0.376,
+              "cache": 0.0,
+              "logic": 5.412,
+              "framework": 1.331
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 186.212,
+            "transport_and_client_ms": 20.064,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 166.148,
+              "sql": 73.004,
+              "pool": 85.823,
+              "serialization": 0.432,
+              "cache": 0.0,
+              "logic": 5.591,
+              "framework": 1.296
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 98.897,
+            "transport_and_client_ms": 14.603,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 84.294,
+              "sql": 68.475,
+              "pool": 7.782,
+              "serialization": 0.442,
+              "cache": 0.0,
+              "logic": 6.235,
+              "framework": 1.36
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 384.613,
+            "transport_and_client_ms": 20.939,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 363.674,
+              "sql": 78.303,
+              "pool": 278.414,
+              "serialization": 0.428,
+              "cache": 0.0,
+              "logic": 5.568,
+              "framework": 0.961
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 292.822,
+            "transport_and_client_ms": 19.081,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 273.741,
+              "sql": 89.136,
+              "pool": 176.086,
+              "serialization": 0.416,
+              "cache": 0.0,
+              "logic": 6.954,
+              "framework": 1.149
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 197.425,
+            "transport_and_client_ms": 28.315,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 169.11,
+              "sql": 71.838,
+              "pool": 88.806,
+              "serialization": 0.442,
+              "cache": 0.0,
+              "logic": 6.687,
+              "framework": 1.338
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 291.788,
+            "transport_and_client_ms": 31.794,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 259.994,
+              "sql": 83.755,
+              "pool": 168.8,
+              "serialization": 0.425,
+              "cache": 0.0,
+              "logic": 5.731,
+              "framework": 1.283
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 111.485,
+            "transport_and_client_ms": 23.052,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 88.433,
+              "sql": 70.711,
+              "pool": 10.944,
+              "serialization": 0.366,
+              "cache": 0.0,
+              "logic": 5.097,
+              "framework": 1.316
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 378.465,
+            "transport_and_client_ms": 32.427,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 346.038,
+              "sql": 75.794,
+              "pool": 262.512,
+              "serialization": 0.554,
+              "cache": 0.0,
+              "logic": 5.822,
+              "framework": 1.356
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 170.105,
+            "transport_and_client_ms": 22.934,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 147.171,
+              "sql": 128.865,
+              "pool": 6.17,
+              "serialization": 1.062,
+              "cache": 0.0,
+              "logic": 8.944,
+              "framework": 2.13
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 331.602,
+            "transport_and_client_ms": 26.433,
+            "response_bytes": 21377,
+            "worker_pid": 8,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 305.169,
+              "sql": 114.402,
+              "pool": 177.178,
+              "serialization": 0.736,
+              "cache": 0.0,
+              "logic": 10.961,
+              "framework": 1.893
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 191.863,
+            "transport_and_client_ms": 18.851,
+            "response_bytes": 21377,
+            "worker_pid": 8,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 173.012,
+              "sql": 149.072,
+              "pool": 5.162,
+              "serialization": 0.938,
+              "cache": 0.0,
+              "logic": 14.306,
+              "framework": 3.534
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 312.936,
+            "transport_and_client_ms": 23.084,
+            "response_bytes": 21377,
+            "worker_pid": 9,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 289.852,
+              "sql": 123.947,
+              "pool": 153.646,
+              "serialization": 0.842,
+              "cache": 0.0,
+              "logic": 9.555,
+              "framework": 1.862
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 236.621,
+            "transport_and_client_ms": 24.792,
+            "response_bytes": 21377,
+            "worker_pid": 8,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 211.829,
+              "sql": 80.501,
+              "pool": 122.151,
+              "serialization": 0.474,
+              "cache": 0.0,
+              "logic": 7.306,
+              "framework": 1.397
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 325.82,
+            "transport_and_client_ms": 26.482,
+            "response_bytes": 21377,
+            "worker_pid": 8,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 299.338,
+              "sql": 78.715,
+              "pool": 212.808,
+              "serialization": 0.41,
+              "cache": 0.0,
+              "logic": 5.874,
+              "framework": 1.53
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 464.742,
+            "transport_and_client_ms": 28.22,
+            "response_bytes": 21377,
+            "worker_pid": 8,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 436.522,
+              "sql": 125.817,
+              "pool": 302.214,
+              "serialization": 0.467,
+              "cache": 0.0,
+              "logic": 6.428,
+              "framework": 1.596
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          },
+          {
+            "status": 200,
+            "http_ms": 137.656,
+            "transport_and_client_ms": 17.32,
+            "response_bytes": 21377,
+            "worker_pid": 8,
+            "sql_queries": 1,
+            "cache_status": "BYPASS",
+            "timing_ms": {
+              "server": 120.336,
+              "sql": 100.526,
+              "pool": 11.34,
+              "serialization": 0.425,
+              "cache": 0.0,
+              "logic": 6.502,
+              "framework": 1.543
+            },
+            "response_sha256": "2da223a8ec42d5389b03347f035eff22fa25736f2216704241e6db16d3eb3b7f"
+          }
+        ]
+      }
+    }
+  }
+}
