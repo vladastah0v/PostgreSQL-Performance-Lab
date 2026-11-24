@@ -99,7 +99,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return {"status": "ok"}
 
     @app.get("/metrics", include_in_schema=False)
-    async def metrics() -> Response:
+    def metrics() -> Response:
         return Response(
             export_metrics(registry, settings.api_metrics_enabled),
             media_type=CONTENT_TYPE_LATEST,

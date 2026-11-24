@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, tests and Docker build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: performance_lab_ci
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: ci-lab-password
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: 6379
+      TEST_DATABASE_URL: postgresql+asyncpg://lab:ci-lab-password@127.0.0.1:5432/performance_lab_ci
+      TEST_REDIS_URL: redis://127.0.0.1:6379/0
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: performance_lab_ci
+          POSTGRES_USER: lab
+          POSTGRES_PASSWORD: ci-lab-password
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U lab -d performance_lab_ci"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+      redis:
+        image: redis:7
+        ports:
+          - '6379:6379'
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          version: '0.13.7'
+      - name: Install Python and dependencies
+        run: |
+          uv python install 3.12
+          uv sync --locked
+      - name: Run Ruff
+        run: |
+          uv run --locked ruff check .
+          uv run --locked ruff format --check .
+      - name: Apply and check migrations
+        run: |
+          uv run --locked alembic upgrade head
+          uv run --locked alembic check
+      - name: Run tests and check application coverage
+        run: uv run --locked pytest --cov=app --cov-report=term-missing --cov-fail-under=75
+      - name: Build Docker image
+        run: docker build --tag postgres-performance-lab:ci .
