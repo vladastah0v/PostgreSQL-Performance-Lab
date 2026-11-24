@@ -1,0 +1,3033 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "sql": "../sql-medium-2026-11-24",
+    "fastapi": "../fastapi-medium-2026-11-24",
+    "redis": "../redis-medium-2026-11-24",
+    "locust": "../locust-medium-2026-11-24",
+    "indexes": "../../../experiments/indexes/optimized-api.json"
+  },
+  "comparisons": [
+    {
+      "section": "sql",
+      "operation": "missing-index",
+      "title": "Поиск пользователей",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 3.097,
+        "min_ms": 3.019,
+        "max_ms": 3.26,
+        "row_count": 12,
+        "sql_count": 1,
+        "shared_hit_blocks": 142,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 0.809,
+        "min_ms": 0.528,
+        "max_ms": 11.265,
+        "row_count": 12,
+        "sql_count": 1,
+        "shared_hit_blocks": 141,
+        "shared_read_blocks": 0,
+        "size_bytes": 90112,
+        "build_wall_ms": 47.461
+      },
+      "latency_changes": {
+        "delta_ms": 2.288,
+        "reduction_pct": 73.877946,
+        "speedup": 3.828183
+      },
+      "change": "Индекс по `lower(city)` сокращает число строк для проверки статуса. Сортировка по ID сохраняется.",
+      "sources": [
+        "../sql-medium-2026-11-24/missing-index/baseline.json",
+        "../sql-medium-2026-11-24/missing-index/optimized.json",
+        "../sql-medium-2026-11-24/missing-index/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/missing-index/explain_before.json",
+        "after": "../sql-medium-2026-11-24/missing-index/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "composite-index",
+      "title": "Заказы по статусу и дате",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 15.918,
+        "min_ms": 12.858,
+        "max_ms": 74.378,
+        "row_count": 100,
+        "sql_count": 1,
+        "shared_hit_blocks": 1010,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 0.304,
+        "min_ms": 0.282,
+        "max_ms": 0.394,
+        "row_count": 100,
+        "sql_count": 1,
+        "shared_hit_blocks": 103,
+        "shared_read_blocks": 0,
+        "size_bytes": 4816896,
+        "build_wall_ms": 327.838
+      },
+      "latency_changes": {
+        "delta_ms": 15.614,
+        "reduction_pct": 98.090212,
+        "speedup": 52.361842
+      },
+      "change": "Один B-tree поддерживает равенство по статусу, диапазон дат и требуемый порядок строк.",
+      "sources": [
+        "../sql-medium-2026-11-24/composite-index/baseline.json",
+        "../sql-medium-2026-11-24/composite-index/optimized.json",
+        "../sql-medium-2026-11-24/composite-index/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/composite-index/explain_before.json",
+        "after": "../sql-medium-2026-11-24/composite-index/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "n-plus-one",
+      "title": "N+1 и пакетная загрузка",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 478.69,
+        "min_ms": 383.907,
+        "max_ms": 904.969,
+        "row_count": 20,
+        "sql_count": 22,
+        "shared_hit_blocks": 49193,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 54.625,
+        "min_ms": 50.034,
+        "max_ms": 62.429,
+        "row_count": 20,
+        "sql_count": 3,
+        "shared_hit_blocks": 3385,
+        "shared_read_blocks": 0
+      },
+      "latency_changes": {
+        "delta_ms": 424.065,
+        "reduction_pct": 88.588648,
+        "speedup": 8.763204
+      },
+      "change": "Обе стороны вызывают реальные ORM-репозитории с одинаковой схемой. `selectinload` загружает позиции страницы одним запросом, заменяя отдельные выборки для заказов.",
+      "sources": [
+        "../sql-medium-2026-11-24/n-plus-one/baseline.json",
+        "../sql-medium-2026-11-24/n-plus-one/optimized.json",
+        "../sql-medium-2026-11-24/n-plus-one/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/n-plus-one/explain_before.json",
+        "after": "../sql-medium-2026-11-24/n-plus-one/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "pagination",
+      "title": "OFFSET и keyset",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 8.826,
+        "min_ms": 6.826,
+        "max_ms": 12.279,
+        "row_count": 20,
+        "sql_count": 1,
+        "shared_hit_blocks": 8115,
+        "shared_read_blocks": 0,
+        "size_bytes": 4816896,
+        "build_wall_ms": 315.88
+      },
+      "after": {
+        "median_ms": 0.094,
+        "min_ms": 0.091,
+        "max_ms": 0.097,
+        "row_count": 20,
+        "sql_count": 1,
+        "shared_hit_blocks": 23,
+        "shared_read_blocks": 0,
+        "size_bytes": 4816896,
+        "build_wall_ms": 414.812
+      },
+      "latency_changes": {
+        "delta_ms": 8.732,
+        "reduction_pct": 98.934965,
+        "speedup": 93.893617
+      },
+      "change": "Оба запроса используют один составной индекс. Keyset начинает сканирование от пары `(created_at, id)`. Получение этой пары вынесено за пределы измерения.",
+      "sources": [
+        "../sql-medium-2026-11-24/pagination/baseline.json",
+        "../sql-medium-2026-11-24/pagination/optimized.json",
+        "../sql-medium-2026-11-24/pagination/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/pagination/explain_before.json",
+        "after": "../sql-medium-2026-11-24/pagination/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "aggregation",
+      "title": "Агрегация рейтинга товаров",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 263.453,
+        "min_ms": 226.547,
+        "max_ms": 598.893,
+        "row_count": 20,
+        "sql_count": 1,
+        "shared_hit_blocks": 4430,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 193.345,
+        "min_ms": 191.522,
+        "max_ms": 313.964,
+        "row_count": 20,
+        "sql_count": 1,
+        "shared_hit_blocks": 4466,
+        "shared_read_blocks": 0
+      },
+      "latency_changes": {
+        "delta_ms": 70.108,
+        "reduction_pct": 26.611198,
+        "speedup": 1.362606
+      },
+      "change": "Позиции агрегируются по ID товара до чтения его названия. В справочник товаров попадают только строки, вошедшие в рейтинг.",
+      "sources": [
+        "../sql-medium-2026-11-24/aggregation/baseline.json",
+        "../sql-medium-2026-11-24/aggregation/optimized.json",
+        "../sql-medium-2026-11-24/aggregation/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/aggregation/explain_before.json",
+        "after": "../sql-medium-2026-11-24/aggregation/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "partial-index",
+      "title": "Частичный индекс заказов",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 19.789,
+        "min_ms": 14.28,
+        "max_ms": 37.47,
+        "row_count": 100,
+        "sql_count": 1,
+        "shared_hit_blocks": 1010,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 0.33,
+        "min_ms": 0.201,
+        "max_ms": 0.497,
+        "row_count": 100,
+        "sql_count": 1,
+        "shared_hit_blocks": 104,
+        "shared_read_blocks": 0,
+        "size_bytes": 180224,
+        "build_wall_ms": 50.196
+      },
+      "latency_changes": {
+        "delta_ms": 19.459,
+        "reduction_pct": 98.332407,
+        "speedup": 59.966667
+      },
+      "change": "В индекс входят заказы `pending`. Он позволяет сразу прочитать последние заказы этого статуса в требуемом порядке.",
+      "sources": [
+        "../sql-medium-2026-11-24/partial-index/baseline.json",
+        "../sql-medium-2026-11-24/partial-index/optimized.json",
+        "../sql-medium-2026-11-24/partial-index/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/partial-index/explain_before.json",
+        "after": "../sql-medium-2026-11-24/partial-index/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "covering-index",
+      "title": "Покрывающий индекс позиций",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 0.574,
+        "min_ms": 0.534,
+        "max_ms": 0.703,
+        "row_count": 1395,
+        "sql_count": 1,
+        "shared_hit_blocks": 22,
+        "shared_read_blocks": 0,
+        "size_bytes": 8953856,
+        "build_wall_ms": 245.611
+      },
+      "after": {
+        "median_ms": 0.726,
+        "min_ms": 0.578,
+        "max_ms": 0.795,
+        "row_count": 1395,
+        "sql_count": 1,
+        "shared_hit_blocks": 14,
+        "shared_read_blocks": 0,
+        "size_bytes": 16670720,
+        "build_wall_ms": 588.16
+      },
+      "latency_changes": {
+        "delta_ms": -0.152,
+        "reduction_pct": -26.480836,
+        "speedup": 0.790634
+      },
+      "change": "Ключ B-tree остаётся одинаковым. `INCLUDE` добавляет колонки ответа. `VACUUM` перед прогоном делает страницы неизменяемого набора доступными для чтения по карте видимости.",
+      "sources": [
+        "../sql-medium-2026-11-24/covering-index/baseline.json",
+        "../sql-medium-2026-11-24/covering-index/optimized.json",
+        "../sql-medium-2026-11-24/covering-index/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/covering-index/explain_before.json",
+        "after": "../sql-medium-2026-11-24/covering-index/explain_after.json"
+      }
+    },
+    {
+      "section": "sql",
+      "operation": "jsonb",
+      "title": "JSONB и GIN",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "До",
+        "После"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 132.883,
+        "min_ms": 107.523,
+        "max_ms": 531.149,
+        "row_count": 1,
+        "sql_count": 1,
+        "shared_hit_blocks": 7767,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 13.981,
+        "min_ms": 9.979,
+        "max_ms": 15.191,
+        "row_count": 1,
+        "sql_count": 1,
+        "shared_hit_blocks": 3182,
+        "shared_read_blocks": 0,
+        "size_bytes": 2260992,
+        "build_wall_ms": 838.443
+      },
+      "latency_changes": {
+        "delta_ms": 118.902,
+        "reduction_pct": 89.478714,
+        "speedup": 9.504542
+      },
+      "change": "Оператор `@>` сохраняет условия поиска. GIN `jsonb_path_ops` находит кандидатов по значениям в JSON-документе.",
+      "sources": [
+        "../sql-medium-2026-11-24/jsonb/baseline.json",
+        "../sql-medium-2026-11-24/jsonb/optimized.json",
+        "../sql-medium-2026-11-24/jsonb/summary.md",
+        "../sql-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": "../sql-medium-2026-11-24/jsonb/explain_before.json",
+        "after": "../sql-medium-2026-11-24/jsonb/explain_after.json"
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "history",
+      "title": "История заказов",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 213.356,
+        "p95_ms": 295.076,
+        "p99_ms": 308.825,
+        "min_ms": 125.609,
+        "max_ms": 308.825,
+        "sql_queries_p50": 22.0,
+        "transport_and_client_p50_ms": 15.865,
+        "response_bytes_p50": 2459.0,
+        "success_count": 20,
+        "sql_p50_ms": 159.125,
+        "pool_p50_ms": 7.338,
+        "serialization_p50_ms": 0.163,
+        "logic_p50_ms": 19.796,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 83.269,
+        "p95_ms": 117.328,
+        "p99_ms": 152.178,
+        "min_ms": 36.561,
+        "max_ms": 152.178,
+        "sql_queries_p50": 3.0,
+        "transport_and_client_p50_ms": 19.532,
+        "response_bytes_p50": 2459.0,
+        "success_count": 20,
+        "sql_p50_ms": 23.022,
+        "pool_p50_ms": 8.157,
+        "serialization_p50_ms": 0.14,
+        "logic_p50_ms": 7.011,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 130.087,
+        "reduction_pct": 60.971803,
+        "speedup": 2.56225
+      },
+      "change": "Пакетная загрузка связанных позиций с selectinload.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/latency.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "top-products",
+      "title": "Рейтинг товаров",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 1520.655,
+        "p95_ms": 1698.453,
+        "p99_ms": 1725.603,
+        "min_ms": 1165.576,
+        "max_ms": 1725.603,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 16.767,
+        "response_bytes_p50": 1674.0,
+        "success_count": 20,
+        "sql_p50_ms": 1491.04,
+        "pool_p50_ms": 7.597,
+        "serialization_p50_ms": 0.09,
+        "logic_p50_ms": 2.513,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 709.324,
+        "p95_ms": 896.672,
+        "p99_ms": 1211.16,
+        "min_ms": 648.723,
+        "max_ms": 1211.16,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 17.248,
+        "response_bytes_p50": 1674.0,
+        "success_count": 20,
+        "sql_p50_ms": 679.538,
+        "pool_p50_ms": 8.149,
+        "serialization_p50_ms": 0.092,
+        "logic_p50_ms": 3.208,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 811.331,
+        "reduction_pct": 53.354048,
+        "speedup": 2.143809
+      },
+      "change": "Агрегация и LIMIT выполняются до чтения названий.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/latency.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "pagination",
+      "title": "Пагинация заказов",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "OFFSET",
+        "Keyset"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 43.752,
+        "p95_ms": 53.545,
+        "p99_ms": 58.984,
+        "min_ms": 33.379,
+        "max_ms": 58.984,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 15.547,
+        "response_bytes_p50": 2232.0,
+        "success_count": 20,
+        "sql_p50_ms": 19.175,
+        "pool_p50_ms": 6.592,
+        "serialization_p50_ms": 0.144,
+        "logic_p50_ms": 2.042,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 35.007,
+        "p95_ms": 40.908,
+        "p99_ms": 43.547,
+        "min_ms": 28.399,
+        "max_ms": 43.547,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 15.342,
+        "response_bytes_p50": 2229.0,
+        "success_count": 20,
+        "sql_p50_ms": 7.944,
+        "pool_p50_ms": 7.462,
+        "serialization_p50_ms": 0.135,
+        "logic_p50_ms": 2.411,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 8.745,
+        "reduction_pct": 19.987658,
+        "speedup": 1.249807
+      },
+      "change": "Keyset вместо OFFSET на той же странице. Курсор получен до замера.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/latency.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "pool/larger-pool",
+      "title": "Два соединения в пуле",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Контроль",
+        "Изменение"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 441.963,
+        "p95_ms": 889.38,
+        "p99_ms": 1251.035,
+        "min_ms": 140.86,
+        "max_ms": 1251.035,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 27.433,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 1,
+        "sql_p50_ms": 134.448,
+        "pool_p50_ms": 247.638,
+        "serialization_p50_ms": 0.787,
+        "logic_p50_ms": 10.378,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 163.39,
+        "p95_ms": 303.944,
+        "p99_ms": 317.058,
+        "min_ms": 105.584,
+        "max_ms": 317.058,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 20.243,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 2,
+        "sql_p50_ms": 82.915,
+        "pool_p50_ms": 55.489,
+        "serialization_p50_ms": 0.467,
+        "logic_p50_ms": 7.091,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 278.573,
+        "reduction_pct": 63.030842,
+        "speedup": 2.704957
+      },
+      "change": "Пул 2 + 0, воркеров 1, таймаут 2 с. HTTP-квантили рассчитаны по успешным ответам. Доля ошибок включает все ответы.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/pool.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "pool/overflow",
+      "title": "Одно соединение и overflow",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Контроль",
+        "Изменение"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 441.963,
+        "p95_ms": 889.38,
+        "p99_ms": 1251.035,
+        "min_ms": 140.86,
+        "max_ms": 1251.035,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 27.433,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 1,
+        "sql_p50_ms": 134.448,
+        "pool_p50_ms": 247.638,
+        "serialization_p50_ms": 0.787,
+        "logic_p50_ms": 10.378,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 183.587,
+        "p95_ms": 257.037,
+        "p99_ms": 278.657,
+        "min_ms": 103.254,
+        "max_ms": 278.657,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 20.785,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 2,
+        "sql_p50_ms": 82.298,
+        "pool_p50_ms": 53.886,
+        "serialization_p50_ms": 0.439,
+        "logic_p50_ms": 6.199,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 258.376,
+        "reduction_pct": 58.461002,
+        "speedup": 2.407376
+      },
+      "change": "Пул 1 + 1, воркеров 1, таймаут 2 с. HTTP-квантили рассчитаны по успешным ответам. Доля ошибок включает все ответы.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/pool.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "pool/short-timeout",
+      "title": "Короткий таймаут пула",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Контроль",
+        "Изменение"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 441.963,
+        "p95_ms": 889.38,
+        "p99_ms": 1251.035,
+        "min_ms": 140.86,
+        "max_ms": 1251.035,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 27.433,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 1,
+        "sql_p50_ms": 134.448,
+        "pool_p50_ms": 247.638,
+        "serialization_p50_ms": 0.787,
+        "logic_p50_ms": 10.378,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 115.709,
+        "p95_ms": 151.319,
+        "p99_ms": 151.319,
+        "min_ms": 109.37,
+        "max_ms": 151.319,
+        "sql_queries_p50": 1,
+        "transport_and_client_p50_ms": 16.031,
+        "response_bytes_p50": 21377,
+        "success_count": 5,
+        "max_slots": 1,
+        "sql_p50_ms": 81.222,
+        "pool_p50_ms": 9.543,
+        "serialization_p50_ms": 0.447,
+        "logic_p50_ms": 5.554,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 75.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 326.254,
+        "reduction_pct": 73.819302,
+        "speedup": 3.819608
+      },
+      "change": "Пул 1 + 0, воркеров 1, таймаут 0.04 с. HTTP-квантили рассчитаны по успешным ответам. Доля ошибок включает все ответы.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/pool.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "pool/two-workers",
+      "title": "Два воркера",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Контроль",
+        "Изменение"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 441.963,
+        "p95_ms": 889.38,
+        "p99_ms": 1251.035,
+        "min_ms": 140.86,
+        "max_ms": 1251.035,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 27.433,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 1,
+        "sql_p50_ms": 134.448,
+        "pool_p50_ms": 247.638,
+        "serialization_p50_ms": 0.787,
+        "logic_p50_ms": 10.378,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {
+        "p50_ms": 248.276,
+        "p95_ms": 384.613,
+        "p99_ms": 464.742,
+        "min_ms": 98.897,
+        "max_ms": 464.742,
+        "sql_queries_p50": 1.0,
+        "transport_and_client_p50_ms": 22.993,
+        "response_bytes_p50": 21377.0,
+        "success_count": 20,
+        "max_slots": 2,
+        "sql_p50_ms": 78.509,
+        "pool_p50_ms": 137.898,
+        "serialization_p50_ms": 0.43,
+        "logic_p50_ms": 6.312,
+        "cache_p50_ms": 0.0,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "latency_changes": {
+        "delta_ms": 193.687,
+        "reduction_pct": 43.824257,
+        "speedup": 1.780128
+      },
+      "change": "Пул 1 + 0, воркеров 2, таймаут 2 с. HTTP-квантили рассчитаны по успешным ответам. Доля ошибок включает все ответы.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/pool.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "orm-core",
+      "title": "Материализация ORM и Core",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "ORM",
+        "Core"
+      ],
+      "latency_metric": "total_ms",
+      "before": {
+        "total_ms": 31.222,
+        "sql_ms": 10.675,
+        "application_ms": 20.02
+      },
+      "after": {
+        "total_ms": 27.838,
+        "sql_ms": 11.192,
+        "application_ms": 16.371
+      },
+      "latency_changes": {
+        "delta_ms": 3.384,
+        "reduction_pct": 10.838511,
+        "speedup": 1.12156
+      },
+      "change": "Одинаковая SQL-выборка и модели ответа. Измерено время клиентской обработки строк и SQL.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/orm.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "fastapi",
+      "operation": "cache-hit",
+      "title": "Профиль попадания Redis",
+      "status": "OBSERVED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "HIT",
+        "—"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 27.812,
+        "p95_ms": 89.057,
+        "p99_ms": 92.911,
+        "min_ms": 16.458,
+        "max_ms": 92.911,
+        "sql_queries_p50": 0.0,
+        "transport_and_client_p50_ms": 16.072,
+        "response_bytes_p50": 1674.0,
+        "success_count": 20,
+        "sql_p50_ms": 0.0,
+        "pool_p50_ms": 0.0,
+        "serialization_p50_ms": 0.088,
+        "logic_p50_ms": 0.052,
+        "cache_p50_ms": 9.256,
+        "error_rate_pct": 0.0,
+        "requests": 20
+      },
+      "after": {},
+      "latency_changes": {
+        "delta_ms": null,
+        "reduction_pct": null,
+        "speedup": null
+      },
+      "change": "Одиночная серия HIT. Число SQL-запросов и HTTP-квантили сохранены для этой серии.",
+      "sources": [
+        "../fastapi-medium-2026-11-24/cache.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "redis",
+      "operation": "sales/cold",
+      "title": "sales · MISS",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Без кэша",
+        "Холодный кэш"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 80.339,
+        "p95_ms": 137.136,
+        "p99_ms": 194.604,
+        "min_ms": 78.306,
+        "max_ms": 194.604
+      },
+      "after": {
+        "p50_ms": 82.118,
+        "p95_ms": 148.041,
+        "p99_ms": 163.62,
+        "min_ms": 80.482,
+        "max_ms": 163.62
+      },
+      "latency_changes": {
+        "delta_ms": -1.779,
+        "reduction_pct": -2.214367,
+        "speedup": 0.978336
+      },
+      "change": "Инвалидация меняла версию ключа перед каждым измерением.",
+      "sources": [
+        "../redis-medium-2026-11-24/disabled.json",
+        "../redis-medium-2026-11-24/cold.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "redis",
+      "operation": "sales/warm",
+      "title": "sales · HIT",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Без кэша",
+        "Прогретый кэш"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 80.339,
+        "p95_ms": 137.136,
+        "p99_ms": 194.604,
+        "min_ms": 78.306,
+        "max_ms": 194.604
+      },
+      "after": {
+        "p50_ms": 10.052,
+        "p95_ms": 13.863,
+        "p99_ms": 28.028,
+        "min_ms": 8.425,
+        "max_ms": 28.028
+      },
+      "latency_changes": {
+        "delta_ms": 70.287,
+        "reduction_pct": 87.48802,
+        "speedup": 7.99234
+      },
+      "change": "Кэш прогрет до начала измерений.",
+      "sources": [
+        "../redis-medium-2026-11-24/disabled.json",
+        "../redis-medium-2026-11-24/warm.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "redis",
+      "operation": "top-products/cold",
+      "title": "top-products · MISS",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Без кэша",
+        "Холодный кэш"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 439.686,
+        "p95_ms": 594.777,
+        "p99_ms": 711.567,
+        "min_ms": 155.455,
+        "max_ms": 711.567
+      },
+      "after": {
+        "p50_ms": 438.178,
+        "p95_ms": 709.16,
+        "p99_ms": 826.505,
+        "min_ms": 158.45,
+        "max_ms": 826.505
+      },
+      "latency_changes": {
+        "delta_ms": 1.508,
+        "reduction_pct": 0.342972,
+        "speedup": 1.003442
+      },
+      "change": "Инвалидация меняла версию ключа перед каждым измерением.",
+      "sources": [
+        "../redis-medium-2026-11-24/disabled.json",
+        "../redis-medium-2026-11-24/cold.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "redis",
+      "operation": "top-products/warm",
+      "title": "top-products · HIT",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Без кэша",
+        "Прогретый кэш"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 439.686,
+        "p95_ms": 594.777,
+        "p99_ms": 711.567,
+        "min_ms": 155.455,
+        "max_ms": 711.567
+      },
+      "after": {
+        "p50_ms": 12.291,
+        "p95_ms": 28.435,
+        "p99_ms": 150.523,
+        "min_ms": 8.507,
+        "max_ms": 150.523
+      },
+      "latency_changes": {
+        "delta_ms": 427.395,
+        "reduction_pct": 97.204596,
+        "speedup": 35.773005
+      },
+      "change": "Кэш прогрет до начала измерений.",
+      "sources": [
+        "../redis-medium-2026-11-24/disabled.json",
+        "../redis-medium-2026-11-24/warm.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "redis",
+      "operation": "customers/cold",
+      "title": "customers · MISS",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Без кэша",
+        "Холодный кэш"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 55.7,
+        "p95_ms": 72.596,
+        "p99_ms": 76.5,
+        "min_ms": 52.664,
+        "max_ms": 76.5
+      },
+      "after": {
+        "p50_ms": 56.586,
+        "p95_ms": 99.279,
+        "p99_ms": 108.246,
+        "min_ms": 54.355,
+        "max_ms": 108.246
+      },
+      "latency_changes": {
+        "delta_ms": -0.886,
+        "reduction_pct": -1.590664,
+        "speedup": 0.984342
+      },
+      "change": "Инвалидация меняла версию ключа перед каждым измерением.",
+      "sources": [
+        "../redis-medium-2026-11-24/disabled.json",
+        "../redis-medium-2026-11-24/cold.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "redis",
+      "operation": "customers/warm",
+      "title": "customers · HIT",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "Без кэша",
+        "Прогретый кэш"
+      ],
+      "latency_metric": "p50_ms",
+      "before": {
+        "p50_ms": 55.7,
+        "p95_ms": 72.596,
+        "p99_ms": 76.5,
+        "min_ms": 52.664,
+        "max_ms": 76.5
+      },
+      "after": {
+        "p50_ms": 9.182,
+        "p95_ms": 11.456,
+        "p99_ms": 13.251,
+        "min_ms": 7.971,
+        "max_ms": 13.251
+      },
+      "latency_changes": {
+        "delta_ms": 46.518,
+        "reduction_pct": 83.51526,
+        "speedup": 6.066217
+      },
+      "change": "Кэш прогрет до начала измерений.",
+      "sources": [
+        "../redis-medium-2026-11-24/disabled.json",
+        "../redis-medium-2026-11-24/warm.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "all",
+      "title": "Все операции",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 113.1265,
+        "p95_ms": 3467.363,
+        "p99_ms": 4223.524,
+        "rps": 10.988,
+        "successful_rps": 10.988,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 17759.988,
+        "mean_ms": 772.2015,
+        "api_mean_cpu_pct": 39.4,
+        "api_peak_memory_bytes": 149369651.0,
+        "postgres_mean_cpu_pct": 167.45,
+        "postgres_peak_memory_bytes": 247673651.0,
+        "db_connections_peak_total": 10.0,
+        "db_connections_peak_active": 9.0,
+        "completed_runs": 2,
+        "min_rps": 10.81,
+        "max_rps": 11.166,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 253,
+        "completed": 253,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 105.929,
+        "p95_ms": 2613.3905,
+        "p99_ms": 3484.91,
+        "rps": 16.371,
+        "successful_rps": 16.371,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 26840.072,
+        "mean_ms": 501.752,
+        "api_mean_cpu_pct": 33.255,
+        "api_peak_memory_bytes": 138045030.5,
+        "postgres_mean_cpu_pct": 206.52,
+        "postgres_peak_memory_bytes": 218261094.5,
+        "db_connections_peak_total": 10.0,
+        "db_connections_peak_active": 8.5,
+        "completed_runs": 2,
+        "min_rps": 15.33,
+        "max_rps": 17.412,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 338,
+        "completed": 338,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 853.9725,
+        "reduction_pct": 24.628875,
+        "speedup": 1.326768
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv",
+        "../locust-medium-2026-11-24/users-10/run-01/baseline/report.json",
+        "../locust-medium-2026-11-24/users-10/run-02/baseline/report.json",
+        "../locust-medium-2026-11-24/users-10/run-01/optimized/report.json",
+        "../locust-medium-2026-11-24/users-10/run-02/optimized/report.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "users-search",
+      "title": "users-search",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 36.634,
+        "p95_ms": 119.373,
+        "p99_ms": 119.373,
+        "rps": 1.216,
+        "successful_rps": 1.216,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3055.816,
+        "mean_ms": 42.9085,
+        "completed_runs": 2,
+        "min_rps": 1.211,
+        "max_rps": 1.221,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 28,
+        "completed": 28,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 30.072,
+        "p95_ms": 228.4485,
+        "p99_ms": 238.5035,
+        "rps": 1.937,
+        "successful_rps": 1.937,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 4868.43,
+        "mean_ms": 54.3055,
+        "completed_runs": 2,
+        "min_rps": 1.746,
+        "max_rps": 2.128,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 40,
+        "completed": 40,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": -109.0755,
+        "reduction_pct": -91.373677,
+        "speedup": 0.522538
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "user-orders",
+      "title": "user-orders",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 131.6905,
+        "p95_ms": 249.14,
+        "p99_ms": 249.14,
+        "rps": 1.39,
+        "successful_rps": 1.39,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3417.3165,
+        "mean_ms": 136.266,
+        "completed_runs": 2,
+        "min_rps": 1.384,
+        "max_rps": 1.396,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 32,
+        "completed": 32,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 51.2905,
+        "p95_ms": 281.437,
+        "p99_ms": 479.0825,
+        "rps": 2.1315,
+        "successful_rps": 2.1315,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 5240.2705,
+        "mean_ms": 98.41,
+        "completed_runs": 2,
+        "min_rps": 1.941,
+        "max_rps": 2.322,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 44,
+        "completed": 44,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": -32.297,
+        "reduction_pct": -12.963394,
+        "speedup": 0.885243
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "orders",
+      "title": "orders",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 35.493,
+        "p95_ms": 159.0635,
+        "p99_ms": 159.0635,
+        "rps": 1.4765,
+        "successful_rps": 1.4765,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3292.7635,
+        "mean_ms": 53.5935,
+        "completed_runs": 2,
+        "min_rps": 1.47,
+        "max_rps": 1.483,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 34,
+        "completed": 34,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 38.6845,
+        "p95_ms": 191.8625,
+        "p99_ms": 489.1585,
+        "rps": 2.1315,
+        "successful_rps": 2.1315,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 4752.5865,
+        "mean_ms": 76.6035,
+        "completed_runs": 2,
+        "min_rps": 2.038,
+        "max_rps": 2.225,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 44,
+        "completed": 44,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": -32.799,
+        "reduction_pct": -20.620067,
+        "speedup": 0.829049
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "order-details",
+      "title": "order-details",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 36.62,
+        "p95_ms": 149.981,
+        "p99_ms": 149.981,
+        "rps": 1.5635,
+        "successful_rps": 1.5635,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 691.0375,
+        "mean_ms": 48.305,
+        "completed_runs": 2,
+        "min_rps": 1.557,
+        "max_rps": 1.57,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 36,
+        "completed": 36,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 34.5705,
+        "p95_ms": 223.85,
+        "p99_ms": 418.361,
+        "rps": 2.1315,
+        "successful_rps": 2.1315,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 942.0575,
+        "mean_ms": 75.2885,
+        "completed_runs": 2,
+        "min_rps": 2.128,
+        "max_rps": 2.135,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 44,
+        "completed": 44,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": -73.869,
+        "reduction_pct": -49.252239,
+        "speedup": 0.670007
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "sales",
+      "title": "sales",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 1242.395,
+        "p95_ms": 2084.12,
+        "p99_ms": 2084.12,
+        "rps": 1.6505,
+        "successful_rps": 1.6505,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1199.761,
+        "mean_ms": 1156.0315,
+        "completed_runs": 2,
+        "min_rps": 1.643,
+        "max_rps": 1.658,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 38,
+        "completed": 38,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 767.194,
+        "p95_ms": 1678.316,
+        "p99_ms": 2004.399,
+        "rps": 2.18,
+        "successful_rps": 2.18,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1584.6555,
+        "mean_ms": 899.6075,
+        "completed_runs": 2,
+        "min_rps": 2.135,
+        "max_rps": 2.225,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 45,
+        "completed": 45,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 405.804,
+        "reduction_pct": 19.47124,
+        "speedup": 1.241792
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "top-products",
+      "title": "top-products",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 3163.7395,
+        "p95_ms": 4245.277,
+        "p99_ms": 4292.476,
+        "rps": 1.6075,
+        "successful_rps": 1.6075,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2690.8405,
+        "mean_ms": 3156.684,
+        "completed_runs": 2,
+        "min_rps": 1.47,
+        "max_rps": 1.745,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 37,
+        "completed": 37,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1822.2705,
+        "p95_ms": 3484.91,
+        "p99_ms": 3737.8305,
+        "rps": 2.1315,
+        "successful_rps": 2.1315,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3567.6365,
+        "mean_ms": 2066.2065,
+        "completed_runs": 2,
+        "min_rps": 2.038,
+        "max_rps": 2.225,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 44,
+        "completed": 44,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 760.367,
+        "reduction_pct": 17.910893,
+        "speedup": 1.218188
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "customers",
+      "title": "customers",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 949.0315,
+        "p95_ms": 2158.8215,
+        "p99_ms": 2158.8215,
+        "rps": 1.0425,
+        "successful_rps": 1.0425,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 127.1595,
+        "mean_ms": 1043.163,
+        "completed_runs": 2,
+        "min_rps": 1.038,
+        "max_rps": 1.047,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 24,
+        "completed": 24,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 446.6025,
+        "p95_ms": 1093.827,
+        "p99_ms": 1109.4055,
+        "rps": 1.937,
+        "successful_rps": 1.937,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 236.35,
+        "mean_ms": 560.176,
+        "completed_runs": 2,
+        "min_rps": 1.746,
+        "max_rps": 2.128,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 40,
+        "completed": 40,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1064.9945,
+        "reduction_pct": 49.332217,
+        "speedup": 1.973641
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "events",
+      "title": "events",
+      "status": "COMPLETED",
+      "level": "users-10",
+      "users": 10,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 29.861,
+        "p95_ms": 53.5,
+        "p99_ms": 53.5,
+        "rps": 1.0425,
+        "successful_rps": 1.0425,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3285.294,
+        "mean_ms": 31.6775,
+        "completed_runs": 2,
+        "min_rps": 1.038,
+        "max_rps": 1.047,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 24,
+        "completed": 24,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 44.6175,
+        "p95_ms": 176.592,
+        "p99_ms": 230.8455,
+        "rps": 1.7915,
+        "successful_rps": 1.7915,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 5648.0845,
+        "mean_ms": 63.4315,
+        "completed_runs": 2,
+        "min_rps": 1.552,
+        "max_rps": 2.031,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 37,
+        "completed": 37,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": -123.092,
+        "reduction_pct": -230.078505,
+        "speedup": 0.302958
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "all",
+      "title": "Все операции",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 1708.814,
+        "p95_ms": 5363.3655,
+        "p99_ms": 6052.078,
+        "rps": 9.808,
+        "successful_rps": 9.808,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 15007.3085,
+        "mean_ms": 2177.9025,
+        "api_mean_cpu_pct": 47.1,
+        "api_peak_memory_bytes": 151309517.0,
+        "postgres_mean_cpu_pct": 193.815,
+        "postgres_peak_memory_bytes": 246992077.0,
+        "db_connections_peak_total": 10.0,
+        "db_connections_peak_active": 10.0,
+        "completed_runs": 2,
+        "min_rps": 8.864,
+        "max_rps": 10.752,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 253,
+        "completed": 253,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 755.2145,
+        "p95_ms": 2684.7025,
+        "p99_ms": 3621.7195,
+        "rps": 20.932,
+        "successful_rps": 20.932,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 34469.4465,
+        "mean_ms": 962.8175,
+        "api_mean_cpu_pct": 29.29,
+        "api_peak_memory_bytes": 144021913.5,
+        "postgres_mean_cpu_pct": 182.48,
+        "postgres_peak_memory_bytes": 233884876.5,
+        "db_connections_peak_total": 10.0,
+        "db_connections_peak_active": 9.5,
+        "completed_runs": 2,
+        "min_rps": 19.134,
+        "max_rps": 22.73,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 512,
+        "completed": 512,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2678.663,
+        "reduction_pct": 49.943697,
+        "speedup": 1.99775
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv",
+        "../locust-medium-2026-11-24/users-25/run-01/baseline/report.json",
+        "../locust-medium-2026-11-24/users-25/run-02/baseline/report.json",
+        "../locust-medium-2026-11-24/users-25/run-01/optimized/report.json",
+        "../locust-medium-2026-11-24/users-25/run-02/optimized/report.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "users-search",
+      "title": "users-search",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 688.958,
+        "p95_ms": 2521.479,
+        "p99_ms": 2521.479,
+        "rps": 0.897,
+        "successful_rps": 0.897,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2253.5645,
+        "mean_ms": 888.0485,
+        "completed_runs": 2,
+        "min_rps": 0.727,
+        "max_rps": 1.067,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 23,
+        "completed": 23,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 407.1215,
+        "p95_ms": 1174.7705,
+        "p99_ms": 1225.9985,
+        "rps": 2.5385,
+        "successful_rps": 2.5385,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 6379.9375,
+        "mean_ms": 522.2225,
+        "completed_runs": 2,
+        "min_rps": 2.281,
+        "max_rps": 2.796,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 62,
+        "completed": 62,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1346.7085,
+        "reduction_pct": 53.409467,
+        "speedup": 2.146359
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "user-orders",
+      "title": "user-orders",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 1032.856,
+        "p95_ms": 3278.2,
+        "p99_ms": 3278.2,
+        "rps": 1.006,
+        "successful_rps": 1.006,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2473.1245,
+        "mean_ms": 1265.3405,
+        "completed_runs": 2,
+        "min_rps": 0.945,
+        "max_rps": 1.067,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 26,
+        "completed": 26,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 457.9045,
+        "p95_ms": 1000.699,
+        "p99_ms": 1212.2545,
+        "rps": 2.703,
+        "successful_rps": 2.703,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 6645.608,
+        "mean_ms": 505.544,
+        "completed_runs": 2,
+        "min_rps": 2.429,
+        "max_rps": 2.977,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 66,
+        "completed": 66,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2277.501,
+        "reduction_pct": 69.474132,
+        "speedup": 3.27591
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "orders",
+      "title": "orders",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 919.515,
+        "p95_ms": 2145.1475,
+        "p99_ms": 2145.1475,
+        "rps": 1.2375,
+        "successful_rps": 1.2375,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2760.3805,
+        "mean_ms": 943.2095,
+        "completed_runs": 2,
+        "min_rps": 1.162,
+        "max_rps": 1.313,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 32,
+        "completed": 32,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 395.844,
+        "p95_ms": 1100.0705,
+        "p99_ms": 1319.0225,
+        "rps": 2.748,
+        "successful_rps": 2.748,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 6127.292,
+        "mean_ms": 491.8105,
+        "completed_runs": 2,
+        "min_rps": 2.429,
+        "max_rps": 3.067,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 67,
+        "completed": 67,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1045.077,
+        "reduction_pct": 48.718188,
+        "speedup": 1.950009
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "order-details",
+      "title": "order-details",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 1054.907,
+        "p95_ms": 2619.1075,
+        "p99_ms": 2619.1075,
+        "rps": 1.4335,
+        "successful_rps": 1.4335,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 633.654,
+        "mean_ms": 1243.6895,
+        "completed_runs": 2,
+        "min_rps": 1.308,
+        "max_rps": 1.559,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 37,
+        "completed": 37,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 421.4905,
+        "p95_ms": 1202.241,
+        "p99_ms": 1305.0445,
+        "rps": 2.8665,
+        "successful_rps": 2.8665,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1266.93,
+        "mean_ms": 517.6765,
+        "completed_runs": 2,
+        "min_rps": 2.576,
+        "max_rps": 3.157,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 70,
+        "completed": 70,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1416.8665,
+        "reduction_pct": 54.097302,
+        "speedup": 2.178521
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "sales",
+      "title": "sales",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 2232.2835,
+        "p95_ms": 4189.266,
+        "p99_ms": 4189.266,
+        "rps": 1.4695,
+        "successful_rps": 1.4695,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1068.6415,
+        "mean_ms": 2522.4185,
+        "completed_runs": 2,
+        "min_rps": 1.38,
+        "max_rps": 1.559,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 38,
+        "completed": 38,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1216.041,
+        "p95_ms": 1904.331,
+        "p99_ms": 1952.5325,
+        "rps": 2.932,
+        "successful_rps": 2.932,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2131.308,
+        "mean_ms": 1231.3745,
+        "completed_runs": 2,
+        "min_rps": 2.797,
+        "max_rps": 3.067,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 72,
+        "completed": 72,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2284.935,
+        "reduction_pct": 54.54261,
+        "speedup": 2.199862
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "top-products",
+      "title": "top-products",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 4595.0675,
+        "p95_ms": 6052.078,
+        "p99_ms": 6748.787,
+        "rps": 1.702,
+        "successful_rps": 1.702,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2849.1955,
+        "mean_ms": 4754.109,
+        "completed_runs": 2,
+        "min_rps": 1.598,
+        "max_rps": 1.806,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 44,
+        "completed": 44,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 2461.312,
+        "p95_ms": 3913.571,
+        "p99_ms": 5715.8455,
+        "rps": 2.641,
+        "successful_rps": 2.641,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 4420.8015,
+        "mean_ms": 2558.7945,
+        "completed_runs": 2,
+        "min_rps": 2.576,
+        "max_rps": 2.706,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 65,
+        "completed": 65,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2138.507,
+        "reduction_pct": 35.335087,
+        "speedup": 1.546434
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "customers",
+      "title": "customers",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 3249.1745,
+        "p95_ms": 4114.128,
+        "p99_ms": 4114.128,
+        "rps": 1.165,
+        "successful_rps": 1.165,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 142.1525,
+        "mean_ms": 3046.2425,
+        "completed_runs": 2,
+        "min_rps": 1.017,
+        "max_rps": 1.313,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 30,
+        "completed": 30,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1207.514,
+        "p95_ms": 2006.2185,
+        "p99_ms": 2049.7925,
+        "rps": 2.211,
+        "successful_rps": 2.211,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 269.7655,
+        "mean_ms": 1244.7045,
+        "completed_runs": 2,
+        "min_rps": 1.987,
+        "max_rps": 2.435,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 54,
+        "completed": 54,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2107.9095,
+        "reduction_pct": 51.235876,
+        "speedup": 2.050688
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "events",
+      "title": "events",
+      "status": "COMPLETED",
+      "level": "users-25",
+      "users": 25,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 1063.46,
+        "p95_ms": 2087.898,
+        "p99_ms": 2087.898,
+        "rps": 0.897,
+        "successful_rps": 0.897,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2826.596,
+        "mean_ms": 1009.988,
+        "completed_runs": 2,
+        "min_rps": 0.727,
+        "max_rps": 1.067,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 23,
+        "completed": 23,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 531.771,
+        "p95_ms": 1329.5635,
+        "p99_ms": 1423.6455,
+        "rps": 2.2935,
+        "successful_rps": 2.2935,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 7227.8055,
+        "mean_ms": 609.719,
+        "completed_runs": 2,
+        "min_rps": 2.061,
+        "max_rps": 2.526,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 56,
+        "completed": 56,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 758.3345,
+        "reduction_pct": 36.320476,
+        "speedup": 1.570364
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "all",
+      "title": "Все операции",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 3231.775,
+        "p95_ms": 6567.1195,
+        "p99_ms": 7669.724,
+        "rps": 11.5765,
+        "successful_rps": 11.4415,
+        "error_rate_pct": 1.1835,
+        "bytes_per_second": 18475.5185,
+        "mean_ms": 3488.253,
+        "api_mean_cpu_pct": 25.52,
+        "api_peak_memory_bytes": 158334976.0,
+        "postgres_mean_cpu_pct": 199.4,
+        "postgres_peak_memory_bytes": 243584205.0,
+        "db_connections_peak_total": 10.0,
+        "db_connections_peak_active": 10.0,
+        "completed_runs": 2,
+        "min_rps": 11.409,
+        "max_rps": 11.744,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 2.367,
+        "issued": 353,
+        "completed": 353,
+        "failed": 4,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 2135.0685,
+        "p95_ms": 4387.157,
+        "p99_ms": 6146.844,
+        "rps": 17.6695,
+        "successful_rps": 17.594,
+        "error_rate_pct": 0.4285,
+        "bytes_per_second": 28080.3985,
+        "mean_ms": 2350.804,
+        "api_mean_cpu_pct": 43.085,
+        "api_peak_memory_bytes": 155818393.5,
+        "postgres_mean_cpu_pct": 245.665,
+        "postgres_peak_memory_bytes": 225338982.5,
+        "db_connections_peak_total": 10.0,
+        "db_connections_peak_active": 10.0,
+        "completed_runs": 2,
+        "min_rps": 16.245,
+        "max_rps": 19.094,
+        "min_error_rate_pct": 0.398,
+        "max_error_rate_pct": 0.459,
+        "issued": 469,
+        "completed": 469,
+        "failed": 2,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2179.9625,
+        "reduction_pct": 33.195109,
+        "speedup": 1.496896
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv",
+        "../locust-medium-2026-11-24/users-50/run-01/baseline/report.json",
+        "../locust-medium-2026-11-24/users-50/run-02/baseline/report.json",
+        "../locust-medium-2026-11-24/users-50/run-01/optimized/report.json",
+        "../locust-medium-2026-11-24/users-50/run-02/optimized/report.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "users-search",
+      "title": "users-search",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 2870.6905,
+        "p95_ms": 4158.434,
+        "p99_ms": 4158.434,
+        "rps": 1.214,
+        "successful_rps": 1.214,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3050.703,
+        "mean_ms": 2647.3165,
+        "completed_runs": 2,
+        "min_rps": 1.213,
+        "max_rps": 1.215,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 37,
+        "completed": 37,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1556.835,
+        "p95_ms": 3554.739,
+        "p99_ms": 4008.9605,
+        "rps": 1.7715,
+        "successful_rps": 1.7715,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 4451.46,
+        "mean_ms": 1724.6025,
+        "completed_runs": 2,
+        "min_rps": 1.565,
+        "max_rps": 1.978,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 47,
+        "completed": 47,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 603.695,
+        "reduction_pct": 14.517364,
+        "speedup": 1.169828
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "user-orders",
+      "title": "user-orders",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 3019.252,
+        "p95_ms": 4929.683,
+        "p99_ms": 5047.929,
+        "rps": 1.674,
+        "successful_rps": 1.674,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 4115.521,
+        "mean_ms": 2911.5485,
+        "completed_runs": 2,
+        "min_rps": 1.66,
+        "max_rps": 1.688,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 51,
+        "completed": 51,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1752.611,
+        "p95_ms": 3282.14,
+        "p99_ms": 4100.6695,
+        "rps": 2.2225,
+        "successful_rps": 2.2225,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 5464.7975,
+        "mean_ms": 1890.072,
+        "completed_runs": 2,
+        "min_rps": 2.087,
+        "max_rps": 2.358,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 59,
+        "completed": 59,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1647.543,
+        "reduction_pct": 33.420871,
+        "speedup": 1.501972
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "orders",
+      "title": "orders",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 2981.735,
+        "p95_ms": 4220.6545,
+        "p99_ms": 4243.617,
+        "rps": 1.674,
+        "successful_rps": 1.6065,
+        "error_rate_pct": 4.0,
+        "bytes_per_second": 3584.134,
+        "mean_ms": 2808.3475,
+        "completed_runs": 2,
+        "min_rps": 1.66,
+        "max_rps": 1.688,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 8.0,
+        "issued": 51,
+        "completed": 51,
+        "failed": 2,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1588.1865,
+        "p95_ms": 3819.154,
+        "p99_ms": 3996.4765,
+        "rps": 2.2975,
+        "successful_rps": 2.2975,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 5123.7835,
+        "mean_ms": 1749.4715,
+        "completed_runs": 2,
+        "min_rps": 2.161,
+        "max_rps": 2.434,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 61,
+        "completed": 61,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 401.5005,
+        "reduction_pct": 9.512754,
+        "speedup": 1.105128
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "order-details",
+      "title": "order-details",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 3044.4315,
+        "p95_ms": 5009.5545,
+        "p99_ms": 5016.9705,
+        "rps": 1.7695,
+        "successful_rps": 1.702,
+        "error_rate_pct": 4.0,
+        "bytes_per_second": 754.664,
+        "mean_ms": 3054.541,
+        "completed_runs": 2,
+        "min_rps": 1.688,
+        "max_rps": 1.851,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 8.0,
+        "issued": 54,
+        "completed": 54,
+        "failed": 2,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 1915.6755,
+        "p95_ms": 3366.7935,
+        "p99_ms": 3880.3675,
+        "rps": 2.599,
+        "successful_rps": 2.599,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1148.6875,
+        "mean_ms": 2023.9365,
+        "completed_runs": 2,
+        "min_rps": 2.459,
+        "max_rps": 2.739,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 69,
+        "completed": 69,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1642.761,
+        "reduction_pct": 32.792557,
+        "speedup": 1.48793
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "sales",
+      "title": "sales",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 4332.4665,
+        "p95_ms": 6054.501,
+        "p99_ms": 6134.292,
+        "rps": 1.674,
+        "successful_rps": 1.674,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1216.7485,
+        "mean_ms": 4044.177,
+        "completed_runs": 2,
+        "min_rps": 1.66,
+        "max_rps": 1.688,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 51,
+        "completed": 51,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 2606.9145,
+        "p95_ms": 4580.1395,
+        "p99_ms": 4757.4425,
+        "rps": 2.562,
+        "successful_rps": 2.562,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 1862.2695,
+        "mean_ms": 2715.205,
+        "completed_runs": 2,
+        "min_rps": 2.385,
+        "max_rps": 2.739,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 68,
+        "completed": 68,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1474.3615,
+        "reduction_pct": 24.351495,
+        "speedup": 1.321903
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "top-products",
+      "title": "top-products",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 5937.6325,
+        "p95_ms": 7669.724,
+        "p99_ms": 7911.791,
+        "rps": 1.441,
+        "successful_rps": 1.441,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 2412.3175,
+        "mean_ms": 5924.7825,
+        "completed_runs": 2,
+        "min_rps": 1.35,
+        "max_rps": 1.532,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 44,
+        "completed": 44,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 3778.8675,
+        "p95_ms": 6356.749,
+        "p99_ms": 8334.8585,
+        "rps": 2.4875,
+        "successful_rps": 2.4495,
+        "error_rate_pct": 1.389,
+        "bytes_per_second": 4099.6715,
+        "mean_ms": 3967.403,
+        "completed_runs": 2,
+        "min_rps": 2.236,
+        "max_rps": 2.739,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 2.778,
+        "issued": 66,
+        "completed": 66,
+        "failed": 1,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1312.975,
+        "reduction_pct": 17.118934,
+        "speedup": 1.206548
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "customers",
+      "title": "customers",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 4369.412,
+        "p95_ms": 6489.0505,
+        "p99_ms": 6489.0505,
+        "rps": 1.1145,
+        "successful_rps": 1.1145,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 135.974,
+        "mean_ms": 4144.1655,
+        "completed_runs": 2,
+        "min_rps": 1.08,
+        "max_rps": 1.149,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 34,
+        "completed": 34,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 2476.0635,
+        "p95_ms": 3890.7885,
+        "p99_ms": 4464.0635,
+        "rps": 1.9225,
+        "successful_rps": 1.8855,
+        "error_rate_pct": 2.2725,
+        "bytes_per_second": 231.3695,
+        "mean_ms": 2403.001,
+        "completed_runs": 2,
+        "min_rps": 1.639,
+        "max_rps": 2.206,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 4.545,
+        "issued": 51,
+        "completed": 51,
+        "failed": 1,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 2598.262,
+        "reduction_pct": 40.040712,
+        "speedup": 1.667798
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "locust",
+      "operation": "events",
+      "title": "events",
+      "status": "COMPLETED",
+      "level": "users-50",
+      "users": 50,
+      "variants": [
+        "Baseline",
+        "Optimized"
+      ],
+      "latency_metric": "p95_ms",
+      "before": {
+        "p50_ms": 2536.8925,
+        "p95_ms": 4521.705,
+        "p99_ms": 4521.705,
+        "rps": 1.017,
+        "successful_rps": 1.017,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 3205.456,
+        "mean_ms": 2217.75,
+        "completed_runs": 2,
+        "min_rps": 1.013,
+        "max_rps": 1.021,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 31,
+        "completed": 31,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "after": {
+        "p50_ms": 2004.5675,
+        "p95_ms": 2973.5315,
+        "p99_ms": 3554.3325,
+        "rps": 1.808,
+        "successful_rps": 1.808,
+        "error_rate_pct": 0.0,
+        "bytes_per_second": 5698.3595,
+        "mean_ms": 1954.513,
+        "completed_runs": 2,
+        "min_rps": 1.714,
+        "max_rps": 1.902,
+        "min_error_rate_pct": 0.0,
+        "max_error_rate_pct": 0.0,
+        "issued": 48,
+        "completed": 48,
+        "failed": 0,
+        "interrupted": 0
+      },
+      "latency_changes": {
+        "delta_ms": 1548.1735,
+        "reduction_pct": 34.238711,
+        "speedup": 1.520651
+      },
+      "change": "Медиана метрик отдельных прогонов. HTTP-ошибки входят в измерение.",
+      "sources": [
+        "../locust-medium-2026-11-24/comparison.csv"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "indexes",
+      "operation": "insert",
+      "title": "INSERT",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "0001",
+        "0002"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 24.856,
+        "median_wal_bytes": 175388,
+        "shared_hit_blocks": 5086,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 72.32,
+        "median_wal_bytes": 489900,
+        "shared_hit_blocks": 16509,
+        "shared_read_blocks": 0
+      },
+      "latency_changes": {
+        "delta_ms": -47.464,
+        "reduction_pct": -190.955906,
+        "speedup": 0.343695
+      },
+      "change": "Ревизия 0002 добавляет индексы Optimized API. Измерены операции на 1000 строках с откатом после каждого прогона.",
+      "sources": [
+        "../../../experiments/indexes/optimized-api.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "section": "indexes",
+      "operation": "update",
+      "title": "UPDATE",
+      "status": "COMPLETED",
+      "level": null,
+      "users": null,
+      "variants": [
+        "0001",
+        "0002"
+      ],
+      "latency_metric": "median_ms",
+      "before": {
+        "median_ms": 10.862,
+        "median_wal_bytes": 240591,
+        "shared_hit_blocks": 8386,
+        "shared_read_blocks": 0
+      },
+      "after": {
+        "median_ms": 36.251,
+        "median_wal_bytes": 486534,
+        "shared_hit_blocks": 17644,
+        "shared_read_blocks": 0
+      },
+      "latency_changes": {
+        "delta_ms": -25.389,
+        "reduction_pct": -233.741484,
+        "speedup": 0.299633
+      },
+      "change": "Ревизия 0002 добавляет индексы Optimized API. Измерены операции на 1000 строках с откатом после каждого прогона.",
+      "sources": [
+        "../../../experiments/indexes/optimized-api.json"
+      ],
+      "plans": {
+        "before": null,
+        "after": null
+      }
+    }
+  ],
+  "charts": {
+    "sql-execution.png": "Время выполнения SQL до и после",
+    "api-latency.png": "Задержка API p50, p95 и p99",
+    "rps-by-concurrency.png": "Пропускная способность Locust",
+    "error-rate.png": "Доля ошибок Locust",
+    "redis-cache.png": "Холодный и прогретый Redis-кэш",
+    "index-impact.png": "Влияние индексов на SELECT и INSERT/UPDATE"
+  }
+}
