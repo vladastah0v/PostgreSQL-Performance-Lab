@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
@@ -113,25 +113,33 @@ class ProfiledPool(AsyncAdaptedQueuePool):
             profile.pool_ns += perf_counter_ns() - started
 
 
-def install_sql_timers(engine: Engine) -> None:
+def install_sql_timers(
+    engine: Engine, observe: Callable[[float, str], None] | None = None
+) -> None:
     @event.listens_for(engine, "before_cursor_execute")
     def start_sql(connection, cursor, statement, parameters, context, executemany):
         profile = current_profile.get()
         if profile is not None:
             profile.sql_count += 1
+        if profile is not None or observe is not None:
             context.lab_query_started = perf_counter_ns()
 
-    def end_sql(context) -> None:
-        profile = current_profile.get()
+    def end_sql(context, outcome: str) -> None:
         started = getattr(context, "lab_query_started", None)
-        if profile is not None and started is not None:
-            profile.sql_ns += perf_counter_ns() - started
-            context.lab_query_started = None
+        if started is None:
+            return
+        context.lab_query_started = None
+        elapsed = perf_counter_ns() - started
+        profile = current_profile.get()
+        if profile is not None:
+            profile.sql_ns += elapsed
+        if observe is not None:
+            observe(elapsed / 1_000_000_000, outcome)
 
     @event.listens_for(engine, "after_cursor_execute")
     def finish_sql(connection, cursor, statement, parameters, context, executemany):
-        end_sql(context)
+        end_sql(context, "ok")
 
     @event.listens_for(engine, "handle_error")
     def finish_failed_sql(exception_context):
-        end_sql(exception_context.execution_context)
+        end_sql(exception_context.execution_context, "error")

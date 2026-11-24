@@ -3,12 +3,14 @@ import os
 
 import httpx
 import pytest
+from prometheus_client import CollectorRegistry
 from sqlalchemy import text
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import DBAPIError
 
 from app.core.config import Settings
 from app.core.database import create_engine
+from app.core.metrics import LabMetrics
 from app.core.profiling import current_profile, profile_request
 from app.main import create_app
 
@@ -79,13 +81,23 @@ async def test_disabled_profiling_has_no_headers(profiled_settings: Settings) ->
 async def test_failed_sql_counts_toward_request_time(
     profiled_settings: Settings,
 ) -> None:
-    engine = create_engine(profiled_settings)
+    registry = CollectorRegistry()
+    metrics = LabMetrics(registry)
+    engine = create_engine(profiled_settings, metrics)
     try:
         with profile_request() as profile, pytest.raises(DBAPIError):
             async with engine.connect() as connection:
+                assert registry.get_sample_value("lab_db_pool_checked_out") == 1
                 await connection.execute(text("SELECT 1 / 0"))
         assert profile.sql_count == 1
         assert profile.sql_ns > 0
         assert profile.pool_ns > 0
+        assert registry.get_sample_value("lab_db_pool_checked_out") == 0
+        assert (
+            registry.get_sample_value(
+                "lab_sql_query_duration_seconds_count", {"outcome": "error"}
+            )
+            == 1
+        )
     finally:
         await engine.dispose()

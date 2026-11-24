@@ -3,6 +3,7 @@ name: postgres-performance-lab
 services:
   api:
     build: .
+    cgroup: private
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
@@ -21,6 +22,7 @@ services:
       DB_POOL_TIMEOUT: ${DB_POOL_TIMEOUT:-5}
       DB_STATEMENT_TIMEOUT_MS: ${DB_STATEMENT_TIMEOUT_MS:-30000}
       API_PROFILING_ENABLED: ${API_PROFILING_ENABLED:-false}
+      API_METRICS_ENABLED: ${API_METRICS_ENABLED:-true}
       WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
       HEALTHCHECK_TIMEOUT: ${HEALTHCHECK_TIMEOUT:-2}
       LAB_MODE: ${LAB_MODE:-false}
@@ -77,6 +79,106 @@ services:
     cpus: 0.5
     mem_limit: 256m
 
+  postgres-monitoring-init:
+    image: postgres:16
+    profiles: [monitoring]
+    user: postgres
+    entrypoint: ["psql", "-X", "--set=ON_ERROR_STOP=1", "--file=/monitoring.sql"]
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB:-performance_lab}
+      PGUSER: ${POSTGRES_USER:-lab}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-lab-local-password}
+      POSTGRES_EXPORTER_PASSWORD: ${POSTGRES_EXPORTER_PASSWORD:-lab-exporter-password}
+    volumes:
+      - ./infra/postgres/monitoring.sql:/monitoring.sql:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    cpus: 0.25
+    mem_limit: 64m
+
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
+    profiles: [monitoring]
+    command:
+      - --collector.stat_statements
+      - --no-collector.stat_statements.include_query
+      - --collector.stat_statements.limit=50
+      - --collector.stat_statements.exclude_users=lab_metrics
+    environment:
+      DATA_SOURCE_URI: "postgres:5432/${POSTGRES_DB:-performance_lab}?sslmode=disable"
+      DATA_SOURCE_USER: lab_metrics
+      DATA_SOURCE_PASS: ${POSTGRES_EXPORTER_PASSWORD:-lab-exporter-password}
+    depends_on:
+      postgres-monitoring-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:9187/"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    cpus: 0.25
+    mem_limit: 128m
+
+  prometheus:
+    image: prom/prometheus:v3.13.5
+    profiles: [monitoring]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=24h
+      - --storage.tsdb.retention.size=512MB
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:${PROMETHEUS_PORT:-9098}:9090"
+    depends_on:
+      api:
+        condition: service_healthy
+      postgres-exporter:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/promtool", "check", "ready", "--url=http://127.0.0.1:9090"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    cpus: 0.5
+    mem_limit: 384m
+
+  grafana:
+    image: grafana/grafana:12.4.12
+    profiles: [monitoring]
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-lab-grafana-password}
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    volumes:
+      - ./infra/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./infra/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./infra/grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-3008}:3000"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    cpus: 0.5
+    mem_limit: 384m
+
 volumes:
   postgres_data:
   redis_data:
+  prometheus_data:
+  grafana_data:

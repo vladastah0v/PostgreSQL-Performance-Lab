@@ -58,12 +58,16 @@ class CacheBusy(RuntimeError):
 
 
 def cache_counter(registry: CollectorRegistry) -> Counter:
-    return Counter(
+    counter = Counter(
         "analytics_cache_requests",
         "Lookup outcomes for optimized analytics requests.",
         ("operation", "outcome"),
         registry=registry,
     )
+    for operation in ("sales", "top-products", "customers"):
+        for outcome in ("hit", "miss"):
+            counter.labels(operation, outcome)
+    return counter
 
 
 class AnalyticsCache:

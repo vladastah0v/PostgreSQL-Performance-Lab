@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 5s
+  scrape_timeout: 4s
+
+scrape_configs:
+  - job_name: api
+    static_configs:
+      - targets: [api:8000]
+  - job_name: postgres
+    static_configs:
+      - targets: [postgres-exporter:9187]
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: pg_stat_statements_query_id
+        action: drop
+  - job_name: prometheus
+    static_configs:
+      - targets: [localhost:9090]

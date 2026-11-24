@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engin
 from sqlalchemy.orm import DeclarativeBase
 
 from app.core.config import Settings
+from app.core.metrics import LabMetrics
 from app.core.profiling import ProfiledPool, install_sql_timers
 
 
@@ -21,7 +22,7 @@ class Base(DeclarativeBase):
     )
 
 
-def create_engine(settings: Settings) -> AsyncEngine:
+def create_engine(settings: Settings, metrics: LabMetrics | None = None) -> AsyncEngine:
     engine = create_async_engine(
         settings.database_url,
         poolclass=ProfiledPool if settings.api_profiling_enabled else None,
@@ -36,8 +37,12 @@ def create_engine(settings: Settings) -> AsyncEngine:
             },
         },
     )
-    if settings.api_profiling_enabled:
-        install_sql_timers(engine.sync_engine)
+    if settings.api_profiling_enabled or metrics is not None:
+        install_sql_timers(engine.sync_engine, metrics.observe_sql if metrics else None)
+    if metrics is not None:
+        metrics.track_pool(
+            engine.pool, settings.db_pool_size + settings.db_max_overflow
+        )
     return engine
 
 

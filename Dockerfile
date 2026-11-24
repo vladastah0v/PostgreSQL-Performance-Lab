@@ -19,7 +19,9 @@ COPY app ./app
 COPY migrations ./migrations
 COPY scripts ./scripts
 COPY alembic.ini ./
+COPY infra/api/entrypoint.sh /usr/local/bin/lab-entrypoint
 
 USER lab
 EXPOSE 8000
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/lab-entrypoint"]
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-proxy-headers", "--log-config", "app/core/logging.json"]

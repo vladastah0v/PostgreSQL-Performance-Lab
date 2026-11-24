@@ -41,7 +41,7 @@
 С подготовленным набором `medium` запустите API в лабораторном режиме. Параметры пулов и workers берутся из конфигурации Compose. Сценарий сохраняет метаданные Docker Desktop и проверяет лимит подключений PostgreSQL перед нагрузкой.
 
 ```bash
-LAB_MODE=true ANALYTICS_CACHE_ENABLED=false API_PROFILING_ENABLED=false WEB_CONCURRENCY=1 \
+LAB_MODE=true ANALYTICS_CACHE_ENABLED=false API_PROFILING_ENABLED=false API_METRICS_ENABLED=false WEB_CONCURRENCY=1 \
   docker compose up --build -d --wait
 
 uv run --locked python -m scripts.run_benchmarks \

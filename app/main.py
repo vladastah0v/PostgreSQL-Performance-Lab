@@ -6,7 +6,7 @@ from typing import Annotated
 
 from asyncpg import PostgresError
 from fastapi import Depends, FastAPI, HTTPException, Response, status
-from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry, generate_latest
+from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
 from sqlalchemy import text
@@ -24,6 +24,12 @@ from app.core.exceptions import (
     resource_not_found,
 )
 from app.core.lab_access import docker_gateway
+from app.core.metrics import (
+    ContainerResources,
+    HttpMetricsMiddleware,
+    LabMetrics,
+    export_metrics,
+)
 from app.core.profiling import ProfileMiddleware, create_profile_tracer, is_api_request
 from app.core.redis import create_redis, get_redis
 from app.schemas.cursors import InvalidCursor
@@ -36,6 +42,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings if settings is not None else Settings()
     registry = CollectorRegistry()
     analytics_requests = cache_counter(registry)
+    instrumentation = LabMetrics(registry) if settings.api_metrics_enabled else None
+    if instrumentation is not None:
+        registry.register(ContainerResources())
     tracer = create_profile_tracer() if settings.api_profiling_enabled else None
 
     @asynccontextmanager
@@ -43,7 +52,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         async with AsyncExitStack() as resources:
             if tracer is not None:
                 resources.callback(tracer.shutdown)
-            engine = create_engine(settings)
+            engine = create_engine(settings, instrumentation)
             resources.push_async_callback(engine.dispose)
             app.state.db_session_factory = async_sessionmaker(
                 engine, expire_on_commit=False
@@ -73,6 +82,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     if tracer is not None:
         app.add_middleware(ProfileMiddleware)
+    if instrumentation is not None:
+        app.add_middleware(HttpMetricsMiddleware, metrics=instrumentation)
     app.add_exception_handler(ResourceNotFound, resource_not_found)
     app.add_exception_handler(InvalidCursor, invalid_cursor)
     app.add_exception_handler(SQLAlchemyError, database_error)
@@ -89,7 +100,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/metrics", include_in_schema=False)
     async def metrics() -> Response:
-        return Response(generate_latest(registry), media_type=CONTENT_TYPE_LATEST)
+        return Response(
+            export_metrics(registry, settings.api_metrics_enabled),
+            media_type=CONTENT_TYPE_LATEST,
+        )
 
     @app.get("/health/ready", tags=["health"])
     async def ready(
