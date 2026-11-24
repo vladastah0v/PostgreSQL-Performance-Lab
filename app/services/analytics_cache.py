@@ -73,6 +73,9 @@ def cache_counter(registry: CollectorRegistry) -> Counter:
 class AnalyticsCache:
     def __init__(self, settings: Settings, redis: Redis, requests: Counter):
         self.redis = redis
+        self.acquire = redis.register_script(ACQUIRE)
+        self.publish = redis.register_script(PUBLISH)
+        self.compare_delete = redis.register_script(COMPARE_DELETE)
         self.enabled = settings.analytics_cache_enabled
         self.prefix = analytics_cache_prefix(settings)
         self.requests = requests
@@ -142,14 +145,14 @@ class AnalyticsCache:
                 if version is not None:
                     key = f"{self.prefix}:{version}:{self.ttl_ms}:{operation}:{digest}"
                     keys = (f"{self.prefix}:version", key, f"{key}:lock")
-                    outcome, *payload = await self.redis.eval(
-                        ACQUIRE, 3, *keys, version, token, self.lease_ms
+                    outcome, *payload = await self.acquire(
+                        keys=keys, args=(version, token, self.lease_ms)
                     )
                     if outcome == "hit":
                         try:
                             cached = adapter.validate_json(payload[0])
                         except ValidationError:
-                            await self.redis.eval(COMPARE_DELETE, 1, key, payload[0])
+                            await self.compare_delete(keys=(key,), args=(payload[0],))
                         else:
                             self.requests.labels(operation, "hit").inc()
                             return cached, "HIT"
@@ -171,14 +174,14 @@ class AnalyticsCache:
             result = await load()
             try:
                 published = bool(
-                    await self.redis.eval(
-                        PUBLISH,
-                        3,
-                        *keys,
-                        version,
-                        token,
-                        adapter.dump_json(result),
-                        payload[0] + self.ttl_ms,
+                    await self.publish(
+                        keys=keys,
+                        args=(
+                            version,
+                            token,
+                            adapter.dump_json(result),
+                            payload[0] + self.ttl_ms,
+                        ),
                     )
                 )
             except RedisError:
@@ -187,4 +190,4 @@ class AnalyticsCache:
         finally:
             if not published:
                 with suppress(RedisError):
-                    await self.redis.eval(COMPARE_DELETE, 1, keys[2], token)
+                    await self.compare_delete(keys=(keys[2],), args=(token,))

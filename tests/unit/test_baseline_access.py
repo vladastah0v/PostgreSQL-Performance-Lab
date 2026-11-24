@@ -28,6 +28,9 @@ async def test_baseline_routes_are_absent_outside_lab_mode() -> None:
         ("172.20.0.3", "localhost", {}),
         ("198.51.100.2", "localhost", {"x-forwarded-for": "127.0.0.1"}),
         ("127.0.0.1", "localhost", {"forwarded": "for=198.51.100.2"}),
+        ("127.0.0.1", "localhost", {"x-forwarded-port": "8008"}),
+        ("127.0.0.1", "localhost", {"host": "localhost:invalid"}),
+        ("127.0.0.1", "localhost", {"host": "localhost:65536"}),
         ("127.0.0.1", "example.test", {}),
     ],
 )

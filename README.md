@@ -43,7 +43,7 @@ FastAPI передаёт операции через общий сервис в 
 | `/users/search` | Поиск пользователей |
 | `/users/{user_id}/orders` | История заказов пользователя |
 | `/orders` | Список заказов с фильтрами |
-| `/orders/{order_id}/details` | Заказ, позиции, платежи и история статусов |
+| `/orders/{order_id}/details` | Заказ, позиции и платежи |
 | `/analytics/sales` | Продажи по периодам |
 | `/analytics/top-products` | Рейтинг товаров |
 | `/analytics/customers` | Статистика покупателей |

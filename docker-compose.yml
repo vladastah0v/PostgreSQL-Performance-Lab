@@ -13,6 +13,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_TIMEOUT: ${REDIS_TIMEOUT:-0.25}
+      REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-64}
       ANALYTICS_CACHE_ENABLED: ${ANALYTICS_CACHE_ENABLED:-true}
       ANALYTICS_CACHE_TTL: ${ANALYTICS_CACHE_TTL:-60}
       ANALYTICS_CACHE_WAIT: ${ANALYTICS_CACHE_WAIT:-5}
@@ -20,6 +21,7 @@ services:
       DB_POOL_SIZE: ${DB_POOL_SIZE:-5}
       DB_MAX_OVERFLOW: ${DB_MAX_OVERFLOW:-5}
       DB_POOL_TIMEOUT: ${DB_POOL_TIMEOUT:-5}
+      DB_CONNECT_TIMEOUT: ${DB_CONNECT_TIMEOUT:-5}
       DB_STATEMENT_TIMEOUT_MS: ${DB_STATEMENT_TIMEOUT_MS:-30000}
       API_PROFILING_ENABLED: ${API_PROFILING_ENABLED:-false}
       API_METRICS_ENABLED: ${API_METRICS_ENABLED:-true}
@@ -149,7 +151,7 @@ services:
     mem_limit: 384m
 
   grafana:
-    image: grafana/grafana:12.4.12
+    image: grafana/grafana:12.4.15
     profiles: [monitoring]
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}

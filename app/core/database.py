@@ -1,7 +1,9 @@
 from collections.abc import AsyncIterator
 
+from asyncpg import PostgresError
 from fastapi import Request
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, event
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -31,12 +33,23 @@ def create_engine(settings: Settings, metrics: LabMetrics | None = None) -> Asyn
         pool_timeout=settings.db_pool_timeout,
         pool_pre_ping=True,
         connect_args={
+            "timeout": settings.db_connect_timeout,
             "server_settings": {
                 "statement_timeout": str(settings.db_statement_timeout_ms),
                 "timezone": "UTC",
             },
         },
     )
+
+    @event.listens_for(engine.sync_engine, "do_connect")
+    def connect(dialect, connection_record, args, kwargs):
+        try:
+            return dialect.connect(*args, **kwargs)
+        except (OSError, PostgresError) as error:
+            raise OperationalError(
+                None, None, error, connection_invalidated=True
+            ) from error
+
     if settings.api_profiling_enabled or metrics is not None:
         install_sql_timers(engine.sync_engine, metrics.observe_sql if metrics else None)
     if metrics is not None:

@@ -1,9 +1,10 @@
 from argparse import Namespace
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from prometheus_client import CollectorRegistry
 from pydantic import TypeAdapter
+from redis.asyncio import Redis
 from redis.exceptions import ConnectionError
 
 from app.core.config import Settings
@@ -17,8 +18,8 @@ from scripts import generate_data
 async def test_unavailable_redis_and_disabled_cache_bypass_to_source(
     enabled: bool,
 ) -> None:
-    redis = AsyncMock()
-    redis.get.side_effect = ConnectionError("Redis unavailable")
+    redis = MagicMock(spec=Redis)
+    redis.get = AsyncMock(side_effect=ConnectionError("Redis unavailable"))
     registry = CollectorRegistry()
     cache = AnalyticsCache(
         Settings(analytics_cache_enabled=enabled), redis, cache_counter(registry)

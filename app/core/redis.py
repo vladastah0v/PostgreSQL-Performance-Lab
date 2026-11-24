@@ -14,6 +14,7 @@ def create_redis(settings: Settings) -> Redis:
         host=settings.redis_host,
         port=settings.redis_port,
         decode_responses=True,
+        max_connections=settings.redis_max_connections,
         socket_connect_timeout=settings.redis_timeout,
         socket_timeout=settings.redis_timeout,
         retry=Retry(NoBackoff(), 0),

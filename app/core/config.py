@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     redis_host: str = "127.0.0.1"
     redis_port: int = Field(default=56379, ge=1, le=65535)
     redis_timeout: float = Field(default=0.25, gt=0, allow_inf_nan=False)
+    redis_max_connections: int = Field(default=64, ge=1)
     analytics_cache_enabled: bool = True
     analytics_cache_ttl: int = Field(default=60, ge=1)
     analytics_cache_wait: float = Field(default=5, gt=0, allow_inf_nan=False)
@@ -23,12 +24,13 @@ class Settings(BaseSettings):
 
     db_pool_size: int = Field(default=5, ge=1)
     db_max_overflow: int = Field(default=5, ge=0)
-    db_pool_timeout: float = Field(default=5, gt=0)
+    db_pool_timeout: float = Field(default=5, gt=0, allow_inf_nan=False)
+    db_connect_timeout: float = Field(default=5, gt=0, allow_inf_nan=False)
     db_statement_timeout_ms: int = Field(default=30_000, ge=1)
     api_profiling_enabled: bool = False
     api_metrics_enabled: bool = True
     web_concurrency: int = Field(default=1, ge=1)
-    healthcheck_timeout: float = Field(default=2, gt=0)
+    healthcheck_timeout: float = Field(default=2, gt=0, allow_inf_nan=False)
     lab_mode: bool = False
     lab_allow_docker_gateway: bool = False
 

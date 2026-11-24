@@ -77,7 +77,8 @@ def runtime_settings(host: str) -> dict:
         "from app.core.config import Settings; "
         "print(Settings().model_dump_json(include={"
         "'lab_mode','analytics_cache_enabled','web_concurrency','db_pool_size','db_max_overflow',"
-        "'db_pool_timeout','db_statement_timeout_ms','api_profiling_enabled','api_metrics_enabled','postgres_db'}))"
+        "'db_pool_timeout','db_connect_timeout','db_statement_timeout_ms','redis_max_connections',"
+        "'api_profiling_enabled','api_metrics_enabled','postgres_db'}))"
     )
     result = json.loads(
         require_command("docker", "compose", "exec", "-T", "api", "python", "-c", code)

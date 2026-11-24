@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.models import OrderStatus, UserStatus
 
@@ -10,6 +10,13 @@ MAX_ID = 2**63 - 1
 
 class QueryParams(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
+    @field_validator("*", mode="before")
+    @classmethod
+    def reject_null_character(cls, value: object) -> object:
+        if isinstance(value, str) and "\x00" in value:
+            raise ValueError("Query parameters cannot contain null characters")
+        return value
 
 
 class OffsetParams(QueryParams):
