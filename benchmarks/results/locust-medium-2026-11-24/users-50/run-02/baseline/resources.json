@@ -1,0 +1,269 @@
+[
+  {
+    "sampled_at_utc": "2026-11-24T15:50:47.892353+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 2.25,
+        "memory_bytes": 150470656,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 1.31,
+        "memory_bytes": 160117555,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 14.61,
+        "memory_bytes": 42792387,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 5,
+      "active": 0,
+      "busy": 0
+    },
+    "locust": {
+      "cpu_pct": 30.6,
+      "memory_bytes": 28979200
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:50:51.193899+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 41.22,
+        "memory_bytes": 144808346,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 189.57,
+        "memory_bytes": 219991245,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.66,
+        "memory_bytes": 42781901,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 5,
+      "active": 0,
+      "busy": 0
+    },
+    "locust": {
+      "cpu_pct": 28.3,
+      "memory_bytes": 54939648
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:50:54.526657+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 20.01,
+        "memory_bytes": 145018061,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 179.68,
+        "memory_bytes": 236349030,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.53,
+        "memory_bytes": 42739958,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 10,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 2.7,
+      "memory_bytes": 55095296
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:50:57.715301+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 7.45,
+        "memory_bytes": 145018061,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 214.9,
+        "memory_bytes": 159068979,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.79,
+        "memory_bytes": 42739958,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 9,
+      "busy": 9
+    },
+    "locust": {
+      "cpu_pct": 5.2,
+      "memory_bytes": 55209984
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:51:00.978952+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 26.32,
+        "memory_bytes": 145122918,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 175.26,
+        "memory_bytes": 222193254,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.57,
+        "memory_bytes": 42698015,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 10,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 4.4,
+      "memory_bytes": 55259136
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:51:04.488241+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 23.98,
+        "memory_bytes": 159488410,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 284.68,
+        "memory_bytes": 224290406,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 1.58,
+        "memory_bytes": 42897244,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 9,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 3.3,
+      "memory_bytes": 55361536
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:51:07.499689+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 23.07,
+        "memory_bytes": 145542349,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 188.74,
+        "memory_bytes": 231945011,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.78,
+        "memory_bytes": 42897244,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 9,
+      "busy": 9
+    },
+    "locust": {
+      "cpu_pct": 3.8,
+      "memory_bytes": 55418880
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:51:10.757428+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 58.39,
+        "memory_bytes": 159593267,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 183.97,
+        "memory_bytes": 241801626,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.53,
+        "memory_bytes": 42855301,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 10,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 6.4,
+      "memory_bytes": 55496704
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:51:14.023756+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 4.1,
+        "memory_bytes": 145018061,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 0.01,
+        "memory_bytes": 160641843,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 6.17,
+        "memory_bytes": 42834330,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 6,
+      "busy": 6
+    },
+    "locust": null,
+    "errors": []
+  }
+]

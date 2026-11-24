@@ -1,0 +1,11 @@
+{
+  "host": "http://127.0.0.1:8008",
+  "scenario": "all",
+  "variant": "optimized",
+  "users": 10,
+  "spawn_rate": 10,
+  "warmup": 2.0,
+  "duration": 10.0,
+  "max_requests": 1000,
+  "request_timeout": 10.0
+}

@@ -1,0 +1,179 @@
+[
+  {
+    "sampled_at_utc": "2026-11-24T15:47:37.264855+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 177.9,
+        "memory_bytes": 147849216,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 0.02,
+        "memory_bytes": 157915546,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 2.45,
+        "memory_bytes": 42897244,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 5,
+      "active": 0,
+      "busy": 0
+    },
+    "locust": {
+      "cpu_pct": 25.4,
+      "memory_bytes": 27500544
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:47:40.255711+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 25.34,
+        "memory_bytes": 137887744,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 168.53,
+        "memory_bytes": 203738317,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.63,
+        "memory_bytes": 42865787,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 5,
+      "active": 0,
+      "busy": 0
+    },
+    "locust": {
+      "cpu_pct": 26.5,
+      "memory_bytes": 52666368
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:47:43.957223+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 59.55,
+        "memory_bytes": 137992602,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 272.25,
+        "memory_bytes": 218208666,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 30.05,
+        "memory_bytes": 49545216,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 9,
+      "active": 4,
+      "busy": 4
+    },
+    "locust": {
+      "cpu_pct": 3.6,
+      "memory_bytes": 52764672
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:47:47.005315+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 21.5,
+        "memory_bytes": 137887744,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 193.18,
+        "memory_bytes": 195769139,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.69,
+        "memory_bytes": 42813358,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 8,
+      "busy": 9
+    },
+    "locust": {
+      "cpu_pct": 3.0,
+      "memory_bytes": 52649984
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:47:50.395964+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 15.18,
+        "memory_bytes": 138097459,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 174.08,
+        "memory_bytes": 222507827,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 1.97,
+        "memory_bytes": 42991616,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 7,
+      "active": 6,
+      "busy": 6
+    },
+    "locust": {
+      "cpu_pct": 7.9,
+      "memory_bytes": 52699136
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:47:53.665112+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 0.42,
+        "memory_bytes": 138307174,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 0.01,
+        "memory_bytes": 155294106,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.74,
+        "memory_bytes": 42991616,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 1,
+      "busy": 5
+    },
+    "locust": null,
+    "errors": []
+  }
+]

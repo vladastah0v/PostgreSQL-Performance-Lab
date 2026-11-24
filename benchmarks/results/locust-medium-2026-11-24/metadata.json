@@ -1,0 +1,107 @@
+{
+  "started_at_utc": "2026-11-24T15:46:57.921227+00:00",
+  "git_commit": "b5356ae1628f5d27a1468fa5d94b18a0cf398ecc",
+  "git_worktree_dirty": true,
+  "python": "3.12.16",
+  "host": "macOS-15.8.2-x86_64-i386-64bit",
+  "host_cpu_count": 4,
+  "host_memory_bytes": 17179869184,
+  "locust": "2.47.0",
+  "docker": {
+    "server_version": "29.9.3",
+    "cpus": 2,
+    "memory_bytes": 6189215744
+  },
+  "dataset_profile": "medium",
+  "dataset": {
+    "manifest": {
+      "counts": {
+        "users": 10000,
+        "orders": 100000,
+        "payments": 100000,
+        "products": 1000,
+        "categories": 20,
+        "order_items": 283240,
+        "user_events": 500000,
+        "order_status_history": 200000
+      },
+      "version": 1,
+      "parameters": {
+        "seed": 42,
+        "users": 10000,
+        "events": 500000,
+        "orders": 100000
+      }
+    },
+    "name": "performance_lab",
+    "revision": "0002",
+    "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)"
+  },
+  "api_settings": {
+    "postgres_db": "performance_lab",
+    "analytics_cache_enabled": false,
+    "db_pool_size": 5,
+    "db_max_overflow": 5,
+    "db_pool_timeout": 5.0,
+    "db_statement_timeout_ms": 30000,
+    "api_profiling_enabled": false,
+    "web_concurrency": 1,
+    "lab_mode": true
+  },
+  "postgres_budget": {
+    "max_connections": 100,
+    "superuser_reserved": 3,
+    "reserved": 0,
+    "other_connections": 2,
+    "required_with_existing": 12,
+    "usable": 97
+  },
+  "redis_mode": "disabled",
+  "repetitions": 2,
+  "think_time_seconds": 0.1,
+  "levels": {
+    "users-10": {
+      "host": "http://127.0.0.1:8008",
+      "scenario": "all",
+      "variant": "baseline",
+      "users": 10,
+      "spawn_rate": 10,
+      "warmup": 2.0,
+      "duration": 10.0,
+      "max_requests": 1000,
+      "request_timeout": 10.0
+    },
+    "users-25": {
+      "host": "http://127.0.0.1:8008",
+      "scenario": "all",
+      "variant": "baseline",
+      "users": 25,
+      "spawn_rate": 25,
+      "warmup": 2.0,
+      "duration": 10.0,
+      "max_requests": 1000,
+      "request_timeout": 10.0
+    },
+    "users-50": {
+      "host": "http://127.0.0.1:8008",
+      "scenario": "all",
+      "variant": "baseline",
+      "users": 50,
+      "spawn_rate": 25,
+      "warmup": 2.0,
+      "duration": 10.0,
+      "max_requests": 1000,
+      "request_timeout": 10.0
+    }
+  },
+  "preflight_matched_rows": {
+    "users-search": 20,
+    "user-orders": 20,
+    "orders": 20,
+    "order-details": 3,
+    "sales": 11,
+    "top-products": 20,
+    "customers": 1,
+    "events": 20
+  }
+}

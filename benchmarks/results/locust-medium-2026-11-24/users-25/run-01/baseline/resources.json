@@ -1,0 +1,179 @@
+[
+  {
+    "sampled_at_utc": "2026-11-24T15:48:15.587386+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 8.41,
+        "memory_bytes": 144179200,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 32.23,
+        "memory_bytes": 152148378,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 15.1,
+        "memory_bytes": 42823844,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 5,
+      "active": 0,
+      "busy": 0
+    },
+    "locust": {
+      "cpu_pct": 56.5,
+      "memory_bytes": 53264384
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:48:18.649643+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 36.68,
+        "memory_bytes": 138831462,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 166.82,
+        "memory_bytes": 203528602,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.56,
+        "memory_bytes": 42802872,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 8,
+      "active": 1,
+      "busy": 4
+    },
+    "locust": {
+      "cpu_pct": 2.0,
+      "memory_bytes": 53477376
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:48:21.907533+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 18.75,
+        "memory_bytes": 138936320,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 164.66,
+        "memory_bytes": 206464614,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 6.61,
+        "memory_bytes": 42991616,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 9,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 7.5,
+      "memory_bytes": 53583872
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:48:25.214709+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 55.39,
+        "memory_bytes": 152567808,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 235.78,
+        "memory_bytes": 229113856,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 1.04,
+        "memory_bytes": 42991616,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 10,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 2.0,
+      "memory_bytes": 53600256
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:48:28.257916+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 5.27,
+        "memory_bytes": 139355750,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 196.3,
+        "memory_bytes": 236558746,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.49,
+        "memory_bytes": 42918216,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 10,
+      "busy": 10
+    },
+    "locust": {
+      "cpu_pct": 1.9,
+      "memory_bytes": 53661696
+    },
+    "errors": []
+  },
+  {
+    "sampled_at_utc": "2026-11-24T15:48:31.524799+00:00",
+    "containers": {
+      "api": {
+        "cpu_pct": 17.59,
+        "memory_bytes": 149107507,
+        "memory_limit_bytes": 536870912
+      },
+      "postgres": {
+        "cpu_pct": 195.4,
+        "memory_bytes": 240543334,
+        "memory_limit_bytes": 2147483648
+      },
+      "redis": {
+        "cpu_pct": 0.51,
+        "memory_bytes": 42918216,
+        "memory_limit_bytes": 268435456
+      }
+    },
+    "postgres_connections": {
+      "total": 10,
+      "active": 10,
+      "busy": 10
+    },
+    "locust": null,
+    "errors": []
+  }
+]

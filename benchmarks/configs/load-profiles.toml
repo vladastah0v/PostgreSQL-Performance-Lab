@@ -1,0 +1,15 @@
+[low]
+users = 10
+spawn_rate = 10
+
+[medium]
+users = 50
+spawn_rate = 25
+
+[high]
+users = 100
+spawn_rate = 25
+
+[stress]
+users = 200
+spawn_rate = 25
