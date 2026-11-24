@@ -1,6 +1,8 @@
+from collections.abc import Awaitable, Callable
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Response
+from pydantic import BaseModel, TypeAdapter
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db_session
@@ -27,6 +29,7 @@ from app.schemas.responses import (
     UserOrder,
     UserSummary,
 )
+from app.services.analytics_cache import AnalyticsCache, CacheBusy, Operation
 from app.services.commerce import CommerceService
 
 router = APIRouter(prefix="/api/v1/optimized", tags=["optimized"])
@@ -40,6 +43,39 @@ async def get_service(
 
 
 Service = Annotated[CommerceService, Depends(get_service)]
+SALES_ADAPTER = TypeAdapter(list[SalesBucket])
+PRODUCTS_ADAPTER = TypeAdapter(list[ProductSales])
+CUSTOMERS_ADAPTER = TypeAdapter(CustomerStats)
+
+
+async def get_analytics_cache(request: Request) -> AnalyticsCache | None:
+    return getattr(request.app.state, "analytics_cache", None)
+
+
+Cache = Annotated[AnalyticsCache | None, Depends(get_analytics_cache)]
+
+
+async def cached_analytics[T](
+    cache: AnalyticsCache | None,
+    operation: Operation,
+    query: BaseModel,
+    adapter: TypeAdapter[T],
+    load: Callable[[], Awaitable[T]],
+    response: Response,
+) -> T:
+    if cache is None:
+        result, status = await load(), "BYPASS"
+    else:
+        try:
+            result, status = await cache.get_or_load(operation, query, adapter, load)
+        except CacheBusy:
+            raise HTTPException(
+                503,
+                "Analytics result is being calculated",
+                headers={"Retry-After": "1"},
+            ) from None
+    response.headers["X-Cache-Status"] = status
+    return result
 
 
 def set_next_cursor[T: UserSummary | OrderSummary | EventSummary](
@@ -90,23 +126,48 @@ async def order_details(order_id: EntityId, service: Service) -> OrderDetails:
 
 @router.get("/analytics/sales")
 async def sales(
-    query: Annotated[SalesQuery, Query()], service: Service
+    query: Annotated[SalesQuery, Query()],
+    service: Service,
+    cache: Cache,
+    response: Response,
 ) -> list[SalesBucket]:
-    return await service.sales(query)
+    return await cached_analytics(
+        cache, "sales", query, SALES_ADAPTER, lambda: service.sales(query), response
+    )
 
 
 @router.get("/analytics/top-products")
 async def top_products(
-    query: Annotated[TopProductsQuery, Query()], service: Service
+    query: Annotated[TopProductsQuery, Query()],
+    service: Service,
+    cache: Cache,
+    response: Response,
 ) -> list[ProductSales]:
-    return await service.top_products(query)
+    return await cached_analytics(
+        cache,
+        "top-products",
+        query,
+        PRODUCTS_ADAPTER,
+        lambda: service.top_products(query),
+        response,
+    )
 
 
 @router.get("/analytics/customers")
 async def customers(
-    query: Annotated[DateRange, Query()], service: Service
+    query: Annotated[DateRange, Query()],
+    service: Service,
+    cache: Cache,
+    response: Response,
 ) -> CustomerStats:
-    return await service.customers(query)
+    return await cached_analytics(
+        cache,
+        "customers",
+        query,
+        CUSTOMERS_ADAPTER,
+        lambda: service.customers(query),
+        response,
+    )
 
 
 @router.get("/events")

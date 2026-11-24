@@ -1,0 +1,391 @@
+{
+  "mode": "disabled",
+  "started_at_utc": "2026-11-24T15:00:42.370237+00:00",
+  "dataset": {
+    "manifest": {
+      "counts": {
+        "users": 10000,
+        "orders": 100000,
+        "payments": 100000,
+        "products": 1000,
+        "categories": 20,
+        "order_items": 283240,
+        "user_events": 500000,
+        "order_status_history": 200000
+      },
+      "version": 1,
+      "parameters": {
+        "seed": 42,
+        "users": 10000,
+        "events": 500000,
+        "orders": 100000
+      }
+    },
+    "name": "performance_lab",
+    "revision": "0002",
+    "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)"
+  },
+  "repetitions": 20,
+  "python": "3.12.16",
+  "git_commit": "945ac95c415e4b6c50f0eb9f08f9d9d990e30ea5",
+  "git_worktree_dirty": true,
+  "docker": {
+    "server_version": "29.9.3",
+    "cpus": 2,
+    "memory_bytes": 6189211648
+  },
+  "redis_version": null,
+  "analytics_cache_ttl_seconds": 60,
+  "concurrency": 1,
+  "operations": {
+    "sales": {
+      "parameters": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31",
+        "period": "month"
+      },
+      "response_sha256": "2849e57c1d51d1da7ed555eb45b48e5a3cd873526d00793be14a842f695a58d1",
+      "runs": [
+        {
+          "repetition": 1,
+          "cache_status": "BYPASS",
+          "latency_ms": 101.291
+        },
+        {
+          "repetition": 2,
+          "cache_status": "BYPASS",
+          "latency_ms": 87.557
+        },
+        {
+          "repetition": 3,
+          "cache_status": "BYPASS",
+          "latency_ms": 82.566
+        },
+        {
+          "repetition": 4,
+          "cache_status": "BYPASS",
+          "latency_ms": 83.908
+        },
+        {
+          "repetition": 5,
+          "cache_status": "BYPASS",
+          "latency_ms": 78.578
+        },
+        {
+          "repetition": 6,
+          "cache_status": "BYPASS",
+          "latency_ms": 79.097
+        },
+        {
+          "repetition": 7,
+          "cache_status": "BYPASS",
+          "latency_ms": 84.492
+        },
+        {
+          "repetition": 8,
+          "cache_status": "BYPASS",
+          "latency_ms": 80.44
+        },
+        {
+          "repetition": 9,
+          "cache_status": "BYPASS",
+          "latency_ms": 79.111
+        },
+        {
+          "repetition": 10,
+          "cache_status": "BYPASS",
+          "latency_ms": 79.062
+        },
+        {
+          "repetition": 11,
+          "cache_status": "BYPASS",
+          "latency_ms": 79.913
+        },
+        {
+          "repetition": 12,
+          "cache_status": "BYPASS",
+          "latency_ms": 78.306
+        },
+        {
+          "repetition": 13,
+          "cache_status": "BYPASS",
+          "latency_ms": 78.501
+        },
+        {
+          "repetition": 14,
+          "cache_status": "BYPASS",
+          "latency_ms": 78.942
+        },
+        {
+          "repetition": 15,
+          "cache_status": "BYPASS",
+          "latency_ms": 78.352
+        },
+        {
+          "repetition": 16,
+          "cache_status": "BYPASS",
+          "latency_ms": 80.238
+        },
+        {
+          "repetition": 17,
+          "cache_status": "BYPASS",
+          "latency_ms": 84.9
+        },
+        {
+          "repetition": 18,
+          "cache_status": "BYPASS",
+          "latency_ms": 84.246
+        },
+        {
+          "repetition": 19,
+          "cache_status": "BYPASS",
+          "latency_ms": 137.136
+        },
+        {
+          "repetition": 20,
+          "cache_status": "BYPASS",
+          "latency_ms": 194.604
+        }
+      ],
+      "p50_ms": 80.339,
+      "p95_ms": 137.136,
+      "p99_ms": 194.604,
+      "min_ms": 78.306,
+      "max_ms": 194.604
+    },
+    "top-products": {
+      "parameters": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31",
+        "limit": 20
+      },
+      "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41",
+      "runs": [
+        {
+          "repetition": 1,
+          "cache_status": "BYPASS",
+          "latency_ms": 157.832
+        },
+        {
+          "repetition": 2,
+          "cache_status": "BYPASS",
+          "latency_ms": 155.455
+        },
+        {
+          "repetition": 3,
+          "cache_status": "BYPASS",
+          "latency_ms": 158.625
+        },
+        {
+          "repetition": 4,
+          "cache_status": "BYPASS",
+          "latency_ms": 156.882
+        },
+        {
+          "repetition": 5,
+          "cache_status": "BYPASS",
+          "latency_ms": 508.963
+        },
+        {
+          "repetition": 6,
+          "cache_status": "BYPASS",
+          "latency_ms": 594.777
+        },
+        {
+          "repetition": 7,
+          "cache_status": "BYPASS",
+          "latency_ms": 232.377
+        },
+        {
+          "repetition": 8,
+          "cache_status": "BYPASS",
+          "latency_ms": 438.774
+        },
+        {
+          "repetition": 9,
+          "cache_status": "BYPASS",
+          "latency_ms": 157.085
+        },
+        {
+          "repetition": 10,
+          "cache_status": "BYPASS",
+          "latency_ms": 468.968
+        },
+        {
+          "repetition": 11,
+          "cache_status": "BYPASS",
+          "latency_ms": 230.728
+        },
+        {
+          "repetition": 12,
+          "cache_status": "BYPASS",
+          "latency_ms": 440.598
+        },
+        {
+          "repetition": 13,
+          "cache_status": "BYPASS",
+          "latency_ms": 173.465
+        },
+        {
+          "repetition": 14,
+          "cache_status": "BYPASS",
+          "latency_ms": 590.167
+        },
+        {
+          "repetition": 15,
+          "cache_status": "BYPASS",
+          "latency_ms": 238.085
+        },
+        {
+          "repetition": 16,
+          "cache_status": "BYPASS",
+          "latency_ms": 711.567
+        },
+        {
+          "repetition": 17,
+          "cache_status": "BYPASS",
+          "latency_ms": 526.925
+        },
+        {
+          "repetition": 18,
+          "cache_status": "BYPASS",
+          "latency_ms": 462.976
+        },
+        {
+          "repetition": 19,
+          "cache_status": "BYPASS",
+          "latency_ms": 485.701
+        },
+        {
+          "repetition": 20,
+          "cache_status": "BYPASS",
+          "latency_ms": 488.826
+        }
+      ],
+      "p50_ms": 439.686,
+      "p95_ms": 594.777,
+      "p99_ms": 711.567,
+      "min_ms": 155.455,
+      "max_ms": 711.567
+    },
+    "customers": {
+      "parameters": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31"
+      },
+      "response_sha256": "599fdadf9246f7de8b6d3669e834169fdba4577bb314d1236ba6cb7f7bdc4e66",
+      "runs": [
+        {
+          "repetition": 1,
+          "cache_status": "BYPASS",
+          "latency_ms": 58.093
+        },
+        {
+          "repetition": 2,
+          "cache_status": "BYPASS",
+          "latency_ms": 52.83
+        },
+        {
+          "repetition": 3,
+          "cache_status": "BYPASS",
+          "latency_ms": 54.061
+        },
+        {
+          "repetition": 4,
+          "cache_status": "BYPASS",
+          "latency_ms": 52.664
+        },
+        {
+          "repetition": 5,
+          "cache_status": "BYPASS",
+          "latency_ms": 61.435
+        },
+        {
+          "repetition": 6,
+          "cache_status": "BYPASS",
+          "latency_ms": 58.276
+        },
+        {
+          "repetition": 7,
+          "cache_status": "BYPASS",
+          "latency_ms": 55.161
+        },
+        {
+          "repetition": 8,
+          "cache_status": "BYPASS",
+          "latency_ms": 56.791
+        },
+        {
+          "repetition": 9,
+          "cache_status": "BYPASS",
+          "latency_ms": 52.941
+        },
+        {
+          "repetition": 10,
+          "cache_status": "BYPASS",
+          "latency_ms": 56.67
+        },
+        {
+          "repetition": 11,
+          "cache_status": "BYPASS",
+          "latency_ms": 53.979
+        },
+        {
+          "repetition": 12,
+          "cache_status": "BYPASS",
+          "latency_ms": 55.772
+        },
+        {
+          "repetition": 13,
+          "cache_status": "BYPASS",
+          "latency_ms": 56.697
+        },
+        {
+          "repetition": 14,
+          "cache_status": "BYPASS",
+          "latency_ms": 54.458
+        },
+        {
+          "repetition": 15,
+          "cache_status": "BYPASS",
+          "latency_ms": 58.667
+        },
+        {
+          "repetition": 16,
+          "cache_status": "BYPASS",
+          "latency_ms": 72.596
+        },
+        {
+          "repetition": 17,
+          "cache_status": "BYPASS",
+          "latency_ms": 76.5
+        },
+        {
+          "repetition": 18,
+          "cache_status": "BYPASS",
+          "latency_ms": 55.129
+        },
+        {
+          "repetition": 19,
+          "cache_status": "BYPASS",
+          "latency_ms": 54.113
+        },
+        {
+          "repetition": 20,
+          "cache_status": "BYPASS",
+          "latency_ms": 55.629
+        }
+      ],
+      "p50_ms": 55.7,
+      "p95_ms": 72.596,
+      "p99_ms": 76.5,
+      "min_ms": 52.664,
+      "max_ms": 76.5
+    }
+  },
+  "cache_counters": [
+    "analytics_cache_requests_total{operation=\"sales\",outcome=\"bypass\"} 21.0",
+    "analytics_cache_requests_total{operation=\"top-products\",outcome=\"bypass\"} 21.0",
+    "analytics_cache_requests_total{operation=\"customers\",outcome=\"bypass\"} 21.0"
+  ]
+}

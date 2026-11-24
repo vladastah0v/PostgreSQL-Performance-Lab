@@ -9,8 +9,10 @@ from itertools import batched
 from time import perf_counter
 
 import asyncpg
+from redis.exceptions import RedisError
 
 from app.core.config import Settings
+from app.core.redis import create_redis, invalidate_analytics_cache
 from scripts.data_rows import (
     DatasetSpec,
     Row,
@@ -317,6 +319,14 @@ async def run(args: argparse.Namespace) -> dict:
         database=settings.postgres_db,
         elapsed_seconds=round(perf_counter() - started, 6),
     )
+    if result["action"] in ("generated", "cleared"):
+        try:
+            async with create_redis(settings) as redis:
+                await invalidate_analytics_cache(redis, settings)
+        except RedisError:
+            logger.warning(
+                "Could not invalidate analytics cache after the database commit"
+            )
     return result
 
 

@@ -1,0 +1,391 @@
+{
+  "mode": "cold",
+  "started_at_utc": "2026-11-24T15:01:13.281472+00:00",
+  "dataset": {
+    "manifest": {
+      "counts": {
+        "users": 10000,
+        "orders": 100000,
+        "payments": 100000,
+        "products": 1000,
+        "categories": 20,
+        "order_items": 283240,
+        "user_events": 500000,
+        "order_status_history": 200000
+      },
+      "version": 1,
+      "parameters": {
+        "seed": 42,
+        "users": 10000,
+        "events": 500000,
+        "orders": 100000
+      }
+    },
+    "name": "performance_lab",
+    "revision": "0002",
+    "postgresql": "16.16 (Debian 16.16-1.pgdg13+1)"
+  },
+  "repetitions": 20,
+  "python": "3.12.16",
+  "git_commit": "945ac95c415e4b6c50f0eb9f08f9d9d990e30ea5",
+  "git_worktree_dirty": true,
+  "docker": {
+    "server_version": "29.9.3",
+    "cpus": 2,
+    "memory_bytes": 6189211648
+  },
+  "redis_version": "7.4.12",
+  "analytics_cache_ttl_seconds": 60,
+  "concurrency": 1,
+  "operations": {
+    "sales": {
+      "parameters": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31",
+        "period": "month"
+      },
+      "response_sha256": "2849e57c1d51d1da7ed555eb45b48e5a3cd873526d00793be14a842f695a58d1",
+      "runs": [
+        {
+          "repetition": 1,
+          "cache_status": "MISS",
+          "latency_ms": 81.183
+        },
+        {
+          "repetition": 2,
+          "cache_status": "MISS",
+          "latency_ms": 106.227
+        },
+        {
+          "repetition": 3,
+          "cache_status": "MISS",
+          "latency_ms": 88.386
+        },
+        {
+          "repetition": 4,
+          "cache_status": "MISS",
+          "latency_ms": 80.572
+        },
+        {
+          "repetition": 5,
+          "cache_status": "MISS",
+          "latency_ms": 81.144
+        },
+        {
+          "repetition": 6,
+          "cache_status": "MISS",
+          "latency_ms": 81.288
+        },
+        {
+          "repetition": 7,
+          "cache_status": "MISS",
+          "latency_ms": 107.052
+        },
+        {
+          "repetition": 8,
+          "cache_status": "MISS",
+          "latency_ms": 148.041
+        },
+        {
+          "repetition": 9,
+          "cache_status": "MISS",
+          "latency_ms": 163.62
+        },
+        {
+          "repetition": 10,
+          "cache_status": "MISS",
+          "latency_ms": 82.184
+        },
+        {
+          "repetition": 11,
+          "cache_status": "MISS",
+          "latency_ms": 81.35
+        },
+        {
+          "repetition": 12,
+          "cache_status": "MISS",
+          "latency_ms": 86.942
+        },
+        {
+          "repetition": 13,
+          "cache_status": "MISS",
+          "latency_ms": 83.149
+        },
+        {
+          "repetition": 14,
+          "cache_status": "MISS",
+          "latency_ms": 80.82
+        },
+        {
+          "repetition": 15,
+          "cache_status": "MISS",
+          "latency_ms": 82.052
+        },
+        {
+          "repetition": 16,
+          "cache_status": "MISS",
+          "latency_ms": 82.008
+        },
+        {
+          "repetition": 17,
+          "cache_status": "MISS",
+          "latency_ms": 80.482
+        },
+        {
+          "repetition": 18,
+          "cache_status": "MISS",
+          "latency_ms": 82.513
+        },
+        {
+          "repetition": 19,
+          "cache_status": "MISS",
+          "latency_ms": 82.817
+        },
+        {
+          "repetition": 20,
+          "cache_status": "MISS",
+          "latency_ms": 80.744
+        }
+      ],
+      "p50_ms": 82.118,
+      "p95_ms": 148.041,
+      "p99_ms": 163.62,
+      "min_ms": 80.482,
+      "max_ms": 163.62
+    },
+    "top-products": {
+      "parameters": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31",
+        "limit": 20
+      },
+      "response_sha256": "69457ef5709ba9640cba9606678b64a9b66eb9a5fcef26792f94f9f4fe8f4a41",
+      "runs": [
+        {
+          "repetition": 1,
+          "cache_status": "MISS",
+          "latency_ms": 159.473
+        },
+        {
+          "repetition": 2,
+          "cache_status": "MISS",
+          "latency_ms": 160.142
+        },
+        {
+          "repetition": 3,
+          "cache_status": "MISS",
+          "latency_ms": 159.739
+        },
+        {
+          "repetition": 4,
+          "cache_status": "MISS",
+          "latency_ms": 158.45
+        },
+        {
+          "repetition": 5,
+          "cache_status": "MISS",
+          "latency_ms": 826.505
+        },
+        {
+          "repetition": 6,
+          "cache_status": "MISS",
+          "latency_ms": 709.16
+        },
+        {
+          "repetition": 7,
+          "cache_status": "MISS",
+          "latency_ms": 167.46
+        },
+        {
+          "repetition": 8,
+          "cache_status": "MISS",
+          "latency_ms": 447.368
+        },
+        {
+          "repetition": 9,
+          "cache_status": "MISS",
+          "latency_ms": 164.496
+        },
+        {
+          "repetition": 10,
+          "cache_status": "MISS",
+          "latency_ms": 474.079
+        },
+        {
+          "repetition": 11,
+          "cache_status": "MISS",
+          "latency_ms": 159.985
+        },
+        {
+          "repetition": 12,
+          "cache_status": "MISS",
+          "latency_ms": 457.833
+        },
+        {
+          "repetition": 13,
+          "cache_status": "MISS",
+          "latency_ms": 161.763
+        },
+        {
+          "repetition": 14,
+          "cache_status": "MISS",
+          "latency_ms": 434.47
+        },
+        {
+          "repetition": 15,
+          "cache_status": "MISS",
+          "latency_ms": 161.296
+        },
+        {
+          "repetition": 16,
+          "cache_status": "MISS",
+          "latency_ms": 480.658
+        },
+        {
+          "repetition": 17,
+          "cache_status": "MISS",
+          "latency_ms": 443.584
+        },
+        {
+          "repetition": 18,
+          "cache_status": "MISS",
+          "latency_ms": 441.886
+        },
+        {
+          "repetition": 19,
+          "cache_status": "MISS",
+          "latency_ms": 481.864
+        },
+        {
+          "repetition": 20,
+          "cache_status": "MISS",
+          "latency_ms": 548.723
+        }
+      ],
+      "p50_ms": 438.178,
+      "p95_ms": 709.16,
+      "p99_ms": 826.505,
+      "min_ms": 158.45,
+      "max_ms": 826.505
+    },
+    "customers": {
+      "parameters": {
+        "date_from": "2025-01-01",
+        "date_to": "2025-12-31"
+      },
+      "response_sha256": "599fdadf9246f7de8b6d3669e834169fdba4577bb314d1236ba6cb7f7bdc4e66",
+      "runs": [
+        {
+          "repetition": 1,
+          "cache_status": "MISS",
+          "latency_ms": 58.961
+        },
+        {
+          "repetition": 2,
+          "cache_status": "MISS",
+          "latency_ms": 57.949
+        },
+        {
+          "repetition": 3,
+          "cache_status": "MISS",
+          "latency_ms": 56.023
+        },
+        {
+          "repetition": 4,
+          "cache_status": "MISS",
+          "latency_ms": 55.739
+        },
+        {
+          "repetition": 5,
+          "cache_status": "MISS",
+          "latency_ms": 57.658
+        },
+        {
+          "repetition": 6,
+          "cache_status": "MISS",
+          "latency_ms": 54.355
+        },
+        {
+          "repetition": 7,
+          "cache_status": "MISS",
+          "latency_ms": 55.907
+        },
+        {
+          "repetition": 8,
+          "cache_status": "MISS",
+          "latency_ms": 55.754
+        },
+        {
+          "repetition": 9,
+          "cache_status": "MISS",
+          "latency_ms": 57.431
+        },
+        {
+          "repetition": 10,
+          "cache_status": "MISS",
+          "latency_ms": 56.189
+        },
+        {
+          "repetition": 11,
+          "cache_status": "MISS",
+          "latency_ms": 56.161
+        },
+        {
+          "repetition": 12,
+          "cache_status": "MISS",
+          "latency_ms": 55.994
+        },
+        {
+          "repetition": 13,
+          "cache_status": "MISS",
+          "latency_ms": 55.858
+        },
+        {
+          "repetition": 14,
+          "cache_status": "MISS",
+          "latency_ms": 56.418
+        },
+        {
+          "repetition": 15,
+          "cache_status": "MISS",
+          "latency_ms": 56.93
+        },
+        {
+          "repetition": 16,
+          "cache_status": "MISS",
+          "latency_ms": 56.754
+        },
+        {
+          "repetition": 17,
+          "cache_status": "MISS",
+          "latency_ms": 58.951
+        },
+        {
+          "repetition": 18,
+          "cache_status": "MISS",
+          "latency_ms": 108.246
+        },
+        {
+          "repetition": 19,
+          "cache_status": "MISS",
+          "latency_ms": 83.44
+        },
+        {
+          "repetition": 20,
+          "cache_status": "MISS",
+          "latency_ms": 99.279
+        }
+      ],
+      "p50_ms": 56.586,
+      "p95_ms": 99.279,
+      "p99_ms": 108.246,
+      "min_ms": 54.355,
+      "max_ms": 108.246
+    }
+  },
+  "cache_counters": [
+    "analytics_cache_requests_total{operation=\"sales\",outcome=\"miss\"} 21.0",
+    "analytics_cache_requests_total{operation=\"top-products\",outcome=\"miss\"} 21.0",
+    "analytics_cache_requests_total{operation=\"customers\",outcome=\"miss\"} 21.0"
+  ]
+}

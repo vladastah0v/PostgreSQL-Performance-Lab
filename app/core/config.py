@@ -15,6 +15,11 @@ class Settings(BaseSettings):
     postgres_password: SecretStr = SecretStr("lab-local-password")
     redis_host: str = "127.0.0.1"
     redis_port: int = Field(default=56379, ge=1, le=65535)
+    redis_timeout: float = Field(default=0.25, gt=0, allow_inf_nan=False)
+    analytics_cache_enabled: bool = True
+    analytics_cache_ttl: int = Field(default=60, ge=1)
+    analytics_cache_wait: float = Field(default=5, gt=0, allow_inf_nan=False)
+    analytics_cache_namespace: str = Field(default="lab", min_length=1)
 
     db_pool_size: int = Field(default=5, ge=1)
     db_max_overflow: int = Field(default=5, ge=0)

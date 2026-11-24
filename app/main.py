@@ -5,7 +5,8 @@ from contextlib import AsyncExitStack, asynccontextmanager
 from typing import Annotated
 
 from asyncpg import PostgresError
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Response, status
+from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry, generate_latest
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
 from sqlalchemy import text
@@ -25,12 +26,15 @@ from app.core.exceptions import (
 from app.core.lab_access import docker_gateway
 from app.core.redis import create_redis, get_redis
 from app.schemas.cursors import InvalidCursor
+from app.services.analytics_cache import AnalyticsCache, cache_counter
 
 logger = logging.getLogger(__name__)
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings if settings is not None else Settings()
+    registry = CollectorRegistry()
+    analytics_requests = cache_counter(registry)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -44,6 +48,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             redis = create_redis(settings)
             resources.push_async_callback(redis.aclose)
             app.state.redis = redis
+            app.state.analytics_cache = AnalyticsCache(
+                settings, redis, analytics_requests
+            )
             yield
 
     app = FastAPI(title="PostgreSQL Performance Lab", lifespan=lifespan)
@@ -61,6 +68,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def live() -> dict[str, str]:
         return {"status": "ok"}
 
+    @app.get("/metrics", include_in_schema=False)
+    async def metrics() -> Response:
+        return Response(generate_latest(registry), media_type=CONTENT_TYPE_LATEST)
+
     @app.get("/health/ready", tags=["health"])
     async def ready(
         session: Annotated[AsyncSession, Depends(get_db_session)],
@@ -69,7 +80,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             async with asyncio.timeout(settings.healthcheck_timeout):
                 await session.execute(text("SELECT 1"))
-                if await redis.ping():
+                if not settings.analytics_cache_enabled or await redis.ping():
                     return {"status": "ok"}
         except (OSError, PostgresError, RedisError, SQLAlchemyError) as exc:
             logger.warning("Readiness check failed (%s)", type(exc).__name__)
