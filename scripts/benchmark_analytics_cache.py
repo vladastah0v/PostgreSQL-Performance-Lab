@@ -81,7 +81,7 @@ async def run(mode: str, base_url: str, repetitions: int) -> dict:
     operations = {}
     async with (
         create_redis(settings) as redis,
-        httpx.AsyncClient(base_url=base_url, timeout=35) as client,
+        httpx.AsyncClient(base_url=base_url, timeout=35, trust_env=False) as client,
     ):
         redis_version = (
             (await redis.info("server"))["redis_version"]

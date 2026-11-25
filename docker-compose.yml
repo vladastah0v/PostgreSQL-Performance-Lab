@@ -46,7 +46,7 @@ services:
     mem_limit: 512m
 
   postgres:
-    image: postgres:16
+    image: &postgres_image postgres:16@sha256:07abc3f43c9395b0bdbbab36bc25ddb0e8d83cd4fcafb5fb7d6abe14ff156dd8
     command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements", "-c", "timezone=UTC"]
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-performance_lab}
@@ -82,7 +82,7 @@ services:
     mem_limit: 256m
 
   postgres-monitoring-init:
-    image: postgres:16
+    image: *postgres_image
     profiles: [monitoring]
     user: postgres
     entrypoint: ["psql", "-X", "--set=ON_ERROR_STOP=1", "--file=/monitoring.sql"]
@@ -102,15 +102,15 @@ services:
     mem_limit: 64m
 
   postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.21.1
     profiles: [monitoring]
     command:
+      - --datasource.uri=postgres:5432/${POSTGRES_DB:-performance_lab}?sslmode=disable
       - --collector.stat_statements
       - --no-collector.stat_statements.include_query
       - --collector.stat_statements.limit=50
       - --collector.stat_statements.exclude_users=lab_metrics
     environment:
-      DATA_SOURCE_URI: "postgres:5432/${POSTGRES_DB:-performance_lab}?sslmode=disable"
       DATA_SOURCE_USER: lab_metrics
       DATA_SOURCE_PASS: ${POSTGRES_EXPORTER_PASSWORD:-lab-exporter-password}
     depends_on:
@@ -125,7 +125,7 @@ services:
     mem_limit: 128m
 
   prometheus:
-    image: prom/prometheus:v3.13.5
+    image: prom/prometheus:v3.16.0
     profiles: [monitoring]
     command:
       - --config.file=/etc/prometheus/prometheus.yml
@@ -151,7 +151,7 @@ services:
     mem_limit: 384m
 
   grafana:
-    image: grafana/grafana:12.4.15
+    build: ./infra/grafana
     profiles: [monitoring]
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}

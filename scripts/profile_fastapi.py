@@ -299,6 +299,7 @@ async def pools(
                 base_url=base_url,
                 timeout=40,
                 limits=httpx.Limits(max_keepalive_connections=0),
+                trust_env=False,
             ) as client:
                 for _ in range(2):
                     await batch(client, workload, concurrency)
@@ -443,7 +444,9 @@ async def run(args: argparse.Namespace) -> dict:
     elif args.scenario == "orm":
         result = await orm(settings, args.repetitions)
     else:
-        async with httpx.AsyncClient(base_url=args.base_url, timeout=40) as client:
+        async with httpx.AsyncClient(
+            base_url=args.base_url, timeout=40, trust_env=False
+        ) as client:
             if args.scenario == "latency":
                 result = await latency(client, args.repetitions, args.concurrency)
             else:

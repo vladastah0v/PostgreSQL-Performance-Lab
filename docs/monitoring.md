@@ -29,7 +29,7 @@ Prometheus опрашивает цели каждые 5 секунд. Для p95
 
 ## PostgreSQL и метки
 
-Compose загружает `pg_stat_statements` через `shared_preload_libraries`. Одноразовый сервис `postgres-monitoring-init` проверяет расширение в `POSTGRES_DB` и настраивает роль `lab_metrics` с `pg_monitor`. Это работает и с уже инициализированным томом. Пароль роли задаётся `POSTGRES_EXPORTER_PASSWORD`. [PostgreSQL Exporter](https://github.com/prometheus-community/postgres_exporter/tree/v0.20.1)
+Compose загружает `pg_stat_statements` через `shared_preload_libraries`. Одноразовый сервис `postgres-monitoring-init` проверяет расширение в `POSTGRES_DB` и настраивает роль `lab_metrics` с `pg_monitor`. Это работает и с уже инициализированным томом. Пароль роли задаётся `POSTGRES_EXPORTER_PASSWORD`. [PostgreSQL Exporter](https://github.com/prometheus-community/postgres_exporter/tree/v0.21.1)
 
 Метки приложения содержат HTTP-метод, шаблон маршрута и статус, результат SQL или фиксированную операцию кэша. Exporter публикует идентификатор SQL-запроса. Исходный SQL, параметры запроса, данные пользователя и полные URL в Prometheus не передаются. [Конфигурация Prometheus](../infra/prometheus/prometheus.yml)
 

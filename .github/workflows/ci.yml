@@ -27,7 +27,7 @@ jobs:
       TEST_REDIS_URL: redis://127.0.0.1:6379/0
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16@sha256:07abc3f43c9395b0bdbbab36bc25ddb0e8d83cd4fcafb5fb7d6abe14ff156dd8
         env:
           POSTGRES_DB: performance_lab_ci
           POSTGRES_USER: lab
